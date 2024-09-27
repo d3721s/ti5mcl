@@ -7,12 +7,42 @@
 		<Option compiler="arm-elf-gcc" />
 		<Build>
 			<Target title="shared">
-				<Option output="bin/Release/ti5mcl" prefix_auto="1" extension_auto="1" />
+				<Option platforms="Windows;Unix;" />
+				<Option output="bin/shared/ti5mcl.so" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="bin/shared/" />
+				<Option object_output="obj/shared/" />
+				<Option type="3" />
+				<Option compiler="arm-elf-gcc" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-fPIC" />
+					<Add directory="C:/Users/lenovo/Desktop/ws/ti5mcl/" />
+					<Add directory="Inc" />
+					<Add directory="Middlewares/libsocketcanpp" />
+					<Add directory="Middlewares/libsocketcanpp/include" />
+					<Add directory="Middlewares/tlog" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add directory="../../../../../Program Files (x86)/Arm GNU Toolchain aarch64-none-linux-gnu/13.3 rel1" />
+				</Linker>
+			</Target>
+			<Target title="demo">
+				<Option platforms="Windows;Unix;" />
+				<Option output="bin/Release/ti5mcl.elf" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="arm-elf-gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-fPIC" />
+					<Add directory="C:/Users/lenovo/Desktop/ws/ti5mcl/" />
+					<Add directory="Inc" />
+					<Add directory="Middlewares/libsocketcanpp" />
+					<Add directory="Middlewares/libsocketcanpp/include" />
+					<Add directory="Middlewares/tlog" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -21,9 +51,27 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-fPIC" />
+			<Add directory="C:/Users/lenovo/Desktop/ws/ti5mcl/" />
+			<Add directory="Inc" />
+			<Add directory="Middlewares/libsocketcanpp" />
+			<Add directory="Middlewares/libsocketcanpp/include" />
+			<Add directory="Middlewares/tlog" />
 		</Compiler>
+		<Unit filename="Inc/ti5mcl.hpp" />
+		<Unit filename="Middlewares/libsocketcanpp/include/CanDriver.hpp" />
+		<Unit filename="Middlewares/libsocketcanpp/include/CanId.hpp" />
+		<Unit filename="Middlewares/libsocketcanpp/include/CanMessage.hpp" />
+		<Unit filename="Middlewares/libsocketcanpp/include/exceptions/CanCloseException.hpp" />
+		<Unit filename="Middlewares/libsocketcanpp/include/exceptions/CanException.hpp" />
+		<Unit filename="Middlewares/libsocketcanpp/include/exceptions/CanInitException.hpp" />
+		<Unit filename="Middlewares/libsocketcanpp/include/exceptions/InvalidSocketException.hpp" />
+		<Unit filename="Middlewares/libsocketcanpp/src/CanDriver.cpp" />
+		<Unit filename="Src/ti5mcl.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
+			<code_completion />
+			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
