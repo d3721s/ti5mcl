@@ -1,0 +1,67 @@
+# depslib dependency file v1.0
+1727404322 source:c:\users\lenovo\desktop\ws\ti5mcl\src\ti5mcl.cpp
+
+1722186873 source:c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\src\candriver.cpp
+	<fcntl.h>
+	<linux/can.h>
+	<linux/can/raw.h>
+	<net/if.h>
+	<sys/ioctl.h>
+	<sys/socket.h>
+	<sys/types.h>
+	<unistd.h>
+	<cmath>
+	<cstdlib>
+	<cstring>
+	<mutex>
+	<queue>
+	<string>
+	<thread>
+	"CanDriver.hpp"
+	"CanId.hpp"
+	"CanMessage.hpp"
+	"exceptions/CanCloseException.hpp"
+	"exceptions/CanException.hpp"
+	"exceptions/CanInitException.hpp"
+	"exceptions/InvalidSocketException.hpp"
+
+1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\candriver.hpp
+	<mutex>
+	<queue>
+	<string>
+	<thread>
+	"CanId.hpp"
+	"CanMessage.hpp"
+
+1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\canid.hpp
+	<bitset>
+	<cmath>
+	<exception>
+	<linux/can.h>
+	<system_error>
+
+1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\canmessage.hpp
+	<linux/can.h>
+	<cstring>
+	<exception>
+	<string>
+	<system_error>
+	<thread>
+	"CanId.hpp"
+
+1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\cancloseexception.hpp
+	<exception>
+	<string>
+
+1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\canexception.hpp
+	<exception>
+	<string>
+
+1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\caninitexception.hpp
+	<exception>
+	<string>
+
+1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\invalidsocketexception.hpp
+	<exception>
+	<string>
+
