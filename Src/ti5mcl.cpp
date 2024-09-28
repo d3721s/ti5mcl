@@ -144,12 +144,6 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
-            string _canFrameSendToString;
-            for (auto i:_canFrameSend.data)
-            {
-                _canFrameSendToString += format("{:02x} ", i);
-            }
-            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -161,6 +155,12 @@ namespace ti5mcl
             tlog_error << "Failed to send test message! " << ex.what() << endl;
             return false;
         }
+        string _canFrameSendToString;
+        for (auto i:_canFrameSend.data)
+        {
+            _canFrameSendToString += format("{:02x} ", i);
+        }
+        tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         return true;
     }
     bool ti5Motor::writeParameter(parameterCodeTableSend1_4 parameterCode,
@@ -177,12 +177,6 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
-            string _canFrameSendToString;
-            for (auto i:_canFrameSend.data)
-            {
-                _canFrameSendToString += format("{:02x} ", i);
-            }
-            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -194,6 +188,12 @@ namespace ti5mcl
             tlog_error << "Failed to send test message! " << ex.what() << endl;
             return false;
         }
+        string _canFrameSendToString;
+        for (auto i:_canFrameSend.data)
+        {
+            _canFrameSendToString += format("{:02x} ", i);
+        }
+        tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         return true;
     }
 
@@ -211,12 +211,6 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
-            string _canFrameSendToString;
-            for (auto i:_canFrameSend.data)
-            {
-                _canFrameSendToString += format("{:02x} ", i);
-            }
-            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -228,6 +222,12 @@ namespace ti5mcl
             tlog_error << "Failed to send test message! " << ex.what() << endl;
             return false;
         }
+        string _canFrameSendToString;
+        for (auto i:_canFrameSend.data)
+        {
+            _canFrameSendToString += format("{:02x} ", i);
+        }
+        tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         return true;
     }
 
@@ -246,13 +246,6 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
-            string _canFrameSendToString;
-            for (auto i:_canFrameSend.data)
-            {
-                _canFrameSendToString += format("{:02x} ", i);
-            }
-            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
-
         }
         catch (CanException &ex)
         {
@@ -264,6 +257,12 @@ namespace ti5mcl
             tlog_error << "Failed to send test message! " << ex.what() << endl;
             return false;
         }
+        string _canFrameSendToString;
+        for (auto i:_canFrameSend.data)
+        {
+            _canFrameSendToString += format("{:02x} ", i);
+        }
+        tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         return true;
     }
 
@@ -283,12 +282,6 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
-            string _canFrameSendToString;
-            for (auto i:_canFrameSend.data)
-            {
-                _canFrameSendToString += format("{:02x} ", i);
-            }
-            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -300,6 +293,12 @@ namespace ti5mcl
             tlog_error << "Failed to send test message! " << ex.what() << endl;
             return false;
         }
+        string _canFrameSendToString;
+        for (auto i:_canFrameSend.data)
+        {
+            _canFrameSendToString += format("{:02x} ", i);
+        }
+        tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         return true;
     }
 
@@ -313,12 +312,6 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
-            string _canFrameSendToString;
-            for (auto i:_canFrameSend.data)
-            {
-                _canFrameSendToString += format("{:02x} ", i);
-            }
-            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -330,6 +323,13 @@ namespace ti5mcl
             tlog_error << "Failed to send test message! " << ex.what() << endl;
             return false;
         }
+        string _canFrameSendToString;
+        for (auto i:_canFrameSend.data)
+        {
+            _canFrameSendToString += format("{:02x} ", i);
+        }
+        tlog_debug << "Sent message!" << _canFrameSendToString << endl;
+
         if (!_canDriver->waitForMessages())
         {
             tlog_error << "Receive Timeout! " << endl;
@@ -360,12 +360,6 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
-            string _canFrameSendToString;
-            for (auto i:_canFrameSend.data)
-            {
-                _canFrameSendToString += format("{:02x} ", i);
-            }
-            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -377,6 +371,12 @@ namespace ti5mcl
             tlog_error << "Failed to send test message! " << ex.what() << endl;
             return false;
         }
+        string _canFrameSendToString;
+        for (auto i:_canFrameSend.data)
+        {
+            _canFrameSendToString += format("{:02x} ", i);
+        }
+        tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         if (!_canDriver->waitForMessages())
         {
             tlog_error << "Receive Timeout! " << endl;
@@ -407,12 +407,6 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
-            string _canFrameSendToString;
-            for (auto i:_canFrameSend.data)
-            {
-                _canFrameSendToString += format("{:02x} ", i);
-            }
-            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -424,6 +418,12 @@ namespace ti5mcl
             tlog_error << "Failed to send test message! " << ex.what() << endl;
             return false;
         }
+        string _canFrameSendToString;
+        for (auto i:_canFrameSend.data)
+        {
+            _canFrameSendToString += format("{:02x} ", i);
+        }
+        tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         if (!_canDriver->waitForMessages())
         {
             tlog_error << "Receive Timeout! " << endl;
