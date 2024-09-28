@@ -626,8 +626,7 @@ static int _tlog_vprintf(struct tlog_log *log, vprint_callback print_callback,
             }
             pthread_mutex_lock(&tlog.lock);
         }
-    }
-    while (maxlen < log->max_line_size);
+    } while (maxlen < log->max_line_size);
     if (log->segment_log)
     {
         segment_head = (struct tlog_segment_head *)(log->buff + log->end);

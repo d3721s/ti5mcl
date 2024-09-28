@@ -1,7 +1,7 @@
 #include "ti5mcl.hpp"
+using namespace std;
 using namespace sockcanpp;
 using namespace sockcanpp::exceptions;
-
 namespace ti5mcl
 {
 
@@ -144,6 +144,12 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
+            string _canFrameSendToString;
+            for (auto i:_canFrameSend.data)
+            {
+                _canFrameSendToString += format("{:02x} ", i);
+            }
+            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -171,6 +177,12 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
+            string _canFrameSendToString;
+            for (auto i:_canFrameSend.data)
+            {
+                _canFrameSendToString += format("{:02x} ", i);
+            }
+            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -199,6 +211,12 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
+            string _canFrameSendToString;
+            for (auto i:_canFrameSend.data)
+            {
+                _canFrameSendToString += format("{:02x} ", i);
+            }
+            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -228,6 +246,13 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
+            string _canFrameSendToString;
+            for (auto i:_canFrameSend.data)
+            {
+                _canFrameSendToString += format("{:02x} ", i);
+            }
+            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
+
         }
         catch (CanException &ex)
         {
@@ -258,6 +283,12 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
+            string _canFrameSendToString;
+            for (auto i:_canFrameSend.data)
+            {
+                _canFrameSendToString += format("{:02x} ", i);
+            }
+            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -282,7 +313,12 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
-            tlog_debug << "Sent " << _canFrameSend.data[0] << endl;
+            string _canFrameSendToString;
+            for (auto i:_canFrameSend.data)
+            {
+                _canFrameSendToString += format("{:02x} ", i);
+            }
+            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -308,8 +344,9 @@ namespace ti5mcl
             return false;
         }
         *value = (_canFrameReceive.getRawFrame().data[1]) |
-                 (_canFrameReceive.getRawFrame().data[2] << 8) | (_canFrameReceive.getRawFrame().data[3]
-                         << 16) | (_canFrameReceive.getRawFrame().data[4] << 24);
+                 (_canFrameReceive.getRawFrame().data[2] << 8) |
+                 (_canFrameReceive.getRawFrame().data[3]
+                  << 16) | (_canFrameReceive.getRawFrame().data[4] << 24);
         return true;
     }
 
@@ -323,6 +360,12 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
+            string _canFrameSendToString;
+            for (auto i:_canFrameSend.data)
+            {
+                _canFrameSendToString += format("{:02x} ", i);
+            }
+            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {
@@ -364,6 +407,12 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
+            string _canFrameSendToString;
+            for (auto i:_canFrameSend.data)
+            {
+                _canFrameSendToString += format("{:02x} ", i);
+            }
+            tlog_debug << "Sent message!" << _canFrameSendToString << endl;
         }
         catch (CanException &ex)
         {

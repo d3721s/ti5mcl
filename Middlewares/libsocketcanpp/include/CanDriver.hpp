@@ -110,7 +110,8 @@ namespace sockcanpp
         virtual bool waitForMessages(milliseconds timeout = milliseconds(
                                          3000)); //!< Waits for CAN messages to appear
 
-        virtual CanMessage readMessage(); //!< Attempts to read a single message from the bus
+        virtual CanMessage
+        readMessage(); //!< Attempts to read a single message from the bus
 
         virtual ssize_t sendMessage(const CanMessage &message,
                                     bool forceExtended = false); //!< Attempts to send a single CAN message
@@ -118,7 +119,8 @@ namespace sockcanpp
                                          milliseconds delay = milliseconds(20),
                                          bool forceExtended = false); //!< Attempts to send a queue of messages
 
-        virtual queue<CanMessage> readQueuedMessages(); //!< Attempts to read all queued messages from the bus
+        virtual queue<CanMessage>
+        readQueuedMessages(); //!< Attempts to read all queued messages from the bus
 
         virtual void setCanFilterMask(const int32_t
                                       mask); //!< Attempts to set a new CAN filter mask to the BIOS
