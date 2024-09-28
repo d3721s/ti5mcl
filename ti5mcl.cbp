@@ -13,7 +13,6 @@
 				<Option object_output="obj/shared/" />
 				<Option type="3" />
 				<Option compiler="arm-elf-gcc" />
-				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-Wall" />
@@ -26,7 +25,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add directory="../../../../../Program Files (x86)/Arm GNU Toolchain aarch64-none-linux-gnu/13.3 rel1" />
+					<Add directory="../../../../Program Files (x86)/Arm GNU Toolchain aarch64-none-linux-gnu/13.3 rel1" />
 				</Linker>
 			</Target>
 			<Target title="demo">
@@ -52,7 +51,6 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fPIC" />
-			<Add directory="C:/Users/lenovo/Desktop/ws/ti5mcl/" />
 			<Add directory="Inc" />
 			<Add directory="Middlewares/libsocketcanpp" />
 			<Add directory="Middlewares/libsocketcanpp/include" />
@@ -70,8 +68,6 @@
 		<Unit filename="Src/ti5mcl.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
-			<code_completion />
-			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

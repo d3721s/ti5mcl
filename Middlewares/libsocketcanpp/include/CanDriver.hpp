@@ -4,7 +4,7 @@
  * @brief Contains the declarations for the SocketCAN wrapper in C++.
  * @version 0.1
  * @date 2020-07-01
- * 
+ *
  * @copyright Copyright (c) 2020
  *
  *  Copyright 2020 Simon Cahill
@@ -41,10 +41,11 @@
 
 /**
  * @brief Main library namespace.
- * 
+ *
  * This namespace contains the library's main code.
  */
-namespace sockcanpp {
+namespace sockcanpp
+{
 
     using std::chrono::milliseconds;
     using std::mutex;
@@ -53,89 +54,120 @@ namespace sockcanpp {
 
     /**
      * @brief CanDriver class; handles communication via CAN.
-     * 
+     *
      * This class provides the means of easily communicating with other devices via CAN in C++.
-     * 
+     *
      * @remarks
      * This class may be inherited by other applications and modified to suit your needs.
      */
-    class CanDriver {
-        public: // +++ Static +++
-            static constexpr int32_t CAN_MAX_DATA_LENGTH = 8; //!< The maximum amount of bytes allowed in a single CAN frame
-            static constexpr int32_t CAN_SOCK_RAW        = CAN_RAW; //!< The raw CAN protocol
-            static constexpr int32_t CAN_SOCK_SEVEN      = 7; //!< A separate CAN protocol, used by certain embedded device OEMs.
+    class CanDriver
+    {
+    public: // +++ Static +++
+        static constexpr int32_t CAN_MAX_DATA_LENGTH =
+            8; //!< The maximum amount of bytes allowed in a single CAN frame
+        static constexpr int32_t CAN_SOCK_RAW        =
+            CAN_RAW; //!< The raw CAN protocol
+        static constexpr int32_t CAN_SOCK_SEVEN      =
+            7; //!< A separate CAN protocol, used by certain embedded device OEMs.
 
-        public: // +++ Constructor / Destructor +++
-            CanDriver(const string& canInterface, const int32_t canProtocol, const CanId defaultSenderId = 0); //!< Constructor
-            CanDriver(const string& canInterface, const int32_t canProtocol, const int32_t filterMask, const CanId defaultSenderId = 0);
-            CanDriver() = default;
-            virtual ~CanDriver() { uninitialiseSocketCan(); } //!< Destructor
+    public: // +++ Constructor / Destructor +++
+        CanDriver(const string &canInterface, const int32_t canProtocol,
+                  const CanId defaultSenderId = 0); //!< Constructor
+        CanDriver(const string &canInterface, const int32_t canProtocol,
+                  const int32_t filterMask, const CanId defaultSenderId = 0);
+        CanDriver() = default;
+        virtual ~CanDriver()
+        {
+            uninitialiseSocketCan();    //!< Destructor
+        }
 
-        public: // +++ Getter / Setter +++
-            CanDriver& setDefaultSenderId(const CanId id) { this->_defaultSenderId = id; return *this; } //!< Sets the default sender ID
+    public: // +++ Getter / Setter +++
+        CanDriver &setDefaultSenderId(const CanId id)
+        {
+            this->_defaultSenderId = id;    //!< Sets the default sender ID
+            return *this;
+        }
 
-            CanId getDefaultSenderId() const { return this->_defaultSenderId; } //!< Gets the default sender ID
+        CanId getDefaultSenderId() const
+        {
+            return this->_defaultSenderId;    //!< Gets the default sender ID
+        }
 
-            int32_t getFilterMask() const { return this->_canFilterMask; } //!< Gets the filter mask used by this instance
-            int32_t getMessageQueueSize() const { return this->_queueSize; } //!< Gets the amount of CAN messages found after last calling waitForMessages()
-            int32_t getSocketFd() const { return this->_socketFd; } //!< The socket file descriptor used by this instance.
+        int32_t getFilterMask() const
+        {
+            return this->_canFilterMask;    //!< Gets the filter mask used by this instance
+        }
+        int32_t getMessageQueueSize() const
+        {
+            return this->_queueSize;    //!< Gets the amount of CAN messages found after last calling waitForMessages()
+        }
+        int32_t getSocketFd() const
+        {
+            return this->_socketFd;    //!< The socket file descriptor used by this instance.
+        }
 
-        public: // +++ I/O +++
-            virtual bool waitForMessages(milliseconds timeout = milliseconds(3000)); //!< Waits for CAN messages to appear
+    public: // +++ I/O +++
+        virtual bool waitForMessages(milliseconds timeout = milliseconds(
+                                         3000)); //!< Waits for CAN messages to appear
 
-            virtual CanMessage readMessage(); //!< Attempts to read a single message from the bus
+        virtual CanMessage readMessage(); //!< Attempts to read a single message from the bus
 
-            virtual ssize_t sendMessage(const CanMessage& message, bool forceExtended = false); //!< Attempts to send a single CAN message
-            virtual ssize_t sendMessageQueue(queue<CanMessage> messages,
-                                     milliseconds delay = milliseconds(20), bool forceExtended = false); //!< Attempts to send a queue of messages
-             
-            virtual queue<CanMessage> readQueuedMessages(); //!< Attempts to read all queued messages from the bus
+        virtual ssize_t sendMessage(const CanMessage &message,
+                                    bool forceExtended = false); //!< Attempts to send a single CAN message
+        virtual ssize_t sendMessageQueue(queue<CanMessage> messages,
+                                         milliseconds delay = milliseconds(20),
+                                         bool forceExtended = false); //!< Attempts to send a queue of messages
 
-            virtual void setCanFilterMask(const int32_t mask); //!< Attempts to set a new CAN filter mask to the BIOS
+        virtual queue<CanMessage> readQueuedMessages(); //!< Attempts to read all queued messages from the bus
 
-        protected: // +++ Socket Management +++
-            virtual void initialiseSocketCan(); //!< Initialises socketcan
-            virtual void uninitialiseSocketCan(); //!< Uninitialises socketcan
+        virtual void setCanFilterMask(const int32_t
+                                      mask); //!< Attempts to set a new CAN filter mask to the BIOS
 
-        private:
-            virtual CanMessage readMessageLock(bool const lock = true); //!< readMessage deadlock guard
-            CanId _defaultSenderId; //!< The ID to send messages with if no other ID was set.
+    protected: // +++ Socket Management +++
+        virtual void initialiseSocketCan(); //!< Initialises socketcan
+        virtual void uninitialiseSocketCan(); //!< Uninitialises socketcan
 
-            int32_t _canFilterMask; //!< The bit mask used to filter CAN messages
-            int32_t _canProtocol; //!< The protocol used when communicating via CAN
-            int32_t _socketFd{-1}; //!< The CAN socket file descriptor
-            int32_t _queueSize{0}; ///!< The size of the message queue read by waitForMessages()
+    private:
+        virtual CanMessage readMessageLock(bool const lock =
+                                               true); //!< readMessage deadlock guard
+        CanId _defaultSenderId; //!< The ID to send messages with if no other ID was set.
 
-            //!< Mutex for thread-safety.
-            mutex _lock{};
-            mutex _lockSend{}; 
+        int32_t _canFilterMask; //!< The bit mask used to filter CAN messages
+        int32_t _canProtocol; //!< The protocol used when communicating via CAN
+        int32_t _socketFd{-1}; //!< The CAN socket file descriptor
+        int32_t _queueSize{0}; ///!< The size of the message queue read by waitForMessages()
 
-            string _canInterface; //!< The CAN interface used for communication (e.g. can0, can1, ...)
+        //!< Mutex for thread-safety.
+        mutex _lock{};
+        mutex _lockSend{};
+
+        string _canInterface; //!< The CAN interface used for communication (e.g. can0, can1, ...)
 
     };
 
-    
+
 
     /**
      * @brief Formats a std string object.
-     * 
+     *
      * @remarks Yoinked from https://github.com/Beatsleigher/liblogpp :)
-     * 
+     *
      * @tparam Args The formatting argument types.
      * @param format The format string.
      * @param args The format arguments (strings must be converted to C-style strings!)
-     * 
-     * @return string The formatted string. 
+     *
+     * @return string The formatted string.
      */
     template<typename... Args>
-    string formatString(const string& format, Args... args)  {
+    string formatString(const string &format, Args... args)
+    {
         using std::unique_ptr;
-        auto stringSize = snprintf(nullptr, 0, format.c_str(), args...) + 1; // +1 for \0
+        auto stringSize = snprintf(nullptr, 0, format.c_str(),
+                                   args...) + 1; // +1 for \0
         unique_ptr<char[]> buffer(new char[stringSize]);
-
         snprintf(buffer.get(), stringSize, format.c_str(), args...);
-
-        return string(buffer.get(), buffer.get() + stringSize - 1); // std::string handles termination for us.
+        return string(buffer.get(),
+                      buffer.get() + stringSize - 1); // std::string handles termination for us.
     }
 
 }
