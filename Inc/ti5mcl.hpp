@@ -79,7 +79,7 @@ namespace ti5mcl
     public://常用1
 
         void power(bool en);//软件启动
-        void reset();//清楚错误 无返回
+        void reset();//清楚错误 无返回,建议使用this->autoMonitor()管理错误！
         bool home();//回原点
         bool halt();//急停
         bool moveAbsolute(long position, long velocity); //绝对运动
@@ -88,8 +88,8 @@ namespace ti5mcl
 
         typedef enum
         {
-            DIRECTIONPOSITIVE = 0,
-            DIRECTIONNEGATIVE = 1,
+            DIRECTIONPOSITIVE = 0,//正向
+            DIRECTIONNEGATIVE = 1,//负向
         } Direction;//方向
 
         bool moveJog(Direction direction, long velocity,
@@ -120,10 +120,10 @@ namespace ti5mcl
         float autoPosition() const;//当前位置
 
     public://扩展1
-        bool customSetPositionOffset(long offset);
-        bool customGetPositionOffset(long *offset);
-        bool customSetMaxCurrent(float maxCurrent);
-        bool customGetMaxCurrent(float *maxCurrent);
+        bool customSetPositionOffset(long offset);//设置位置偏移
+        bool customGetPositionOffset(long *offset);//获取位置偏移
+        bool customSetMaxCurrent(float maxCurrent);//设置最大电流
+        bool customGetMaxCurrent(float *maxCurrent);//获取最大电流
 
 
     private:

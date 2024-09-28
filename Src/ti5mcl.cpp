@@ -282,6 +282,7 @@ namespace ti5mcl
         try
         {
             _canDriver->sendMessage(CanMessage(_canFrameSend));
+            tlog_debug << "Sent " << _canFrameSend.data[0] << endl;
         }
         catch (CanException &ex)
         {
@@ -300,15 +301,15 @@ namespace ti5mcl
         }
         auto _canFrameReceive = _canDriver->readMessage(); // read the message
         if(((_canFrameReceive.getCanId()) != _canFrameSend.can_id) ||
-                (_canFrameReceive.getFrameData().size() != 5) ||
-                (_canFrameReceive.getFrameData()[0] != parameterCode))
+                (_canFrameReceive.getRawFrame().can_dlc != 5) ||
+                (_canFrameReceive.getRawFrame().data[0] != parameterCode))
         {
             tlog_error << "Receive Wrong Message! " << endl;
             return false;
         }
-        *value = (_canFrameReceive.getFrameData()[1]) |
-                 (_canFrameReceive.getFrameData()[2] << 8) | (_canFrameReceive.getFrameData()[3]
-                         << 16) | (_canFrameReceive.getFrameData()[4] << 24);
+        *value = (_canFrameReceive.getRawFrame().data[1]) |
+                 (_canFrameReceive.getRawFrame().data[2] << 8) | (_canFrameReceive.getRawFrame().data[3]
+                         << 16) | (_canFrameReceive.getRawFrame().data[4] << 24);
         return true;
     }
 
@@ -340,8 +341,8 @@ namespace ti5mcl
         }
         auto _canFrameReceive = _canDriver->readMessage(); // read the message
         if(((_canFrameReceive.getCanId()) != _canFrameSend.can_id) ||
-                (_canFrameReceive.getFrameData().size() != 5) ||
-                (_canFrameReceive.getFrameData()[0] != parameterCode))
+                (_canFrameReceive.getRawFrame().can_dlc != 5) ||
+                (_canFrameReceive.getRawFrame().data[0] != parameterCode))
         {
             tlog_error << "Receive Wrong Message! " << endl;
             return false;
@@ -381,8 +382,8 @@ namespace ti5mcl
         }
         auto _canFrameReceive = _canDriver->readMessage(); // read the message
         if(((_canFrameReceive.getCanId()) != _canFrameSend.can_id) ||
-                (_canFrameReceive.getFrameData().size() != 5) ||
-                (_canFrameReceive.getFrameData()[0] != parameterCode))
+                (_canFrameReceive.getRawFrame().can_dlc != 5) ||
+                (_canFrameReceive.getRawFrame().data[0] != parameterCode))
         {
             tlog_error << "Receive Wrong Message! " << endl;
             return false;
