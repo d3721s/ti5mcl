@@ -397,7 +397,7 @@ namespace ti5mcl
                                          parameterCode, int32_t value, int16_t *value1, int16_t *value2, int32_t *value3)
     {
         _canFrameSend.can_id = this->_canId;
-        _canFrameSend.can_dlc = 1;
+        _canFrameSend.can_dlc = 5;
         _canFrameSend.data[0] = static_cast<uint8_t>(parameterCode);
         _canFrameSend.data[1] = static_cast<uint8_t>((value & 0xFF));
         _canFrameSend.data[2] = static_cast<uint8_t>(((value >> 8) & 0xFF));
