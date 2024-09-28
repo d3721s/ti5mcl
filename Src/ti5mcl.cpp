@@ -343,6 +343,12 @@ namespace ti5mcl
             tlog_error << "Receive Wrong Message! " << endl;
             return false;
         }
+        string _canFrameReceiveToString;
+        for (auto i:_canFrameReceive.getRawFrame().data)
+        {
+            _canFrameReceiveToString += format("{:02x} ", i);
+        }
+        tlog_debug << "Received message!" << _canFrameReceiveToString << endl;
         *value = (_canFrameReceive.getRawFrame().data[1]) |
                  (_canFrameReceive.getRawFrame().data[2] << 8) |
                  (_canFrameReceive.getRawFrame().data[3]
@@ -390,6 +396,20 @@ namespace ti5mcl
             tlog_error << "Receive Wrong Message! " << endl;
             return false;
         }
+        string _canFrameReceiveToString;
+        for (auto i:_canFrameReceive.getRawFrame().data)
+        {
+            _canFrameReceiveToString += format("{:02x} ", i);
+        }
+        tlog_debug << "Received message!" << _canFrameReceiveToString << endl;
+        *value1 = (_canFrameReceive.getRawFrame().data[0]) |
+                 (_canFrameReceive.getRawFrame().data[1] << 8);
+        *value2 = (_canFrameReceive.getRawFrame().data[2]) |
+                 (_canFrameReceive.getRawFrame().data[3] << 8);
+        *value3 = (_canFrameReceive.getRawFrame().data[4]) |
+                 (_canFrameReceive.getRawFrame().data[5] << 8)|
+                 (_canFrameReceive.getRawFrame().data[6] << 16)|
+                 (_canFrameReceive.getRawFrame().data[7] << 24);        
         return true;
     }
 
@@ -437,6 +457,20 @@ namespace ti5mcl
             tlog_error << "Receive Wrong Message! " << endl;
             return false;
         }
+        string _canFrameReceiveToString;
+        for (auto i:_canFrameReceive.getRawFrame().data)
+        {
+            _canFrameReceiveToString += format("{:02x} ", i);
+        }
+        tlog_debug << "Received message!" << _canFrameReceiveToString << endl;
+        *value1 = (_canFrameReceive.getRawFrame().data[0]) |
+                 (_canFrameReceive.getRawFrame().data[1] << 8);
+        *value2 = (_canFrameReceive.getRawFrame().data[2]) |
+                 (_canFrameReceive.getRawFrame().data[3] << 8);
+        *value3 = (_canFrameReceive.getRawFrame().data[4]) |
+                 (_canFrameReceive.getRawFrame().data[5] << 8)|
+                 (_canFrameReceive.getRawFrame().data[6] << 16)|
+                 (_canFrameReceive.getRawFrame().data[7] << 24);
         return true;
     }
 
