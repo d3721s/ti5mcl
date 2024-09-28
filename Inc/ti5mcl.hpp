@@ -72,9 +72,10 @@ class ti5Motor
     {
 
     }
-    public:
+    public://工程1
 
-    public:
+    public://常用1
+
     void power(bool en);//软件启动
     void reset();//清楚错误 无返回
     bool home();//回原点
@@ -82,6 +83,7 @@ class ti5Motor
     bool moveAbsolute(long position,long velocity);//绝对运动
     bool moveRelative(long distance,long velocity);//相对运动
     bool moveVelocity(long velocity, bool positionControlled);//速度运动
+
     typedef enum
     {
 	    DIRECTIONPOSITIVE = 0,
@@ -90,6 +92,42 @@ class ti5Motor
 
     bool moveJog(Direction direction, long velocity,bool positionControlled);//点动
 
+
+    public://常用2
+    bool quickSetMaxSpeed(float maxSpeed);//设置最大速度
+    bool quickSetMaxAcceleration(float maxAcceleration);//设置最大加速度
+    bool quickSetMaxPosition(float maxPosition); //设置最大位置
+    bool quickSetMinPosition(float minPosition); //设置最小位置
+    bool quickSetEnableStatus(bool status); //设置使能状态
+    bool quickSetZero(); //设置零点
+    bool quickClearError(); //清除错误
+    bool quickGetMaxSpeed(float* maxSpeed); //获取最大速度
+    bool quickGetMaxAcceleration(float* maxAcceleration); //获取最大加速度
+    bool quickGetMaxPosition(float* maxPosition); //获取最大位置
+    bool quickGetMinPosition(float* minPosition); //获取最小位置
+    bool quickGetEnableStatus(bool* status); //获取使能状态
+    bool quickGetErrorCode(uint16_t* errorCode); //获取错误码
+
+    public://常用3
+    bool autoMonitor(bool enable);//自动监控
+    bool autoCurrentSpeedPosition(bool enable,uint16_t period);//自动获取当前电流、速度、位置 单位5ms
+    float autoCurrent() const;//当前电流
+    float autoSpeed() const;//当前速度
+    float autoPosition() const;//当前位置
+
+    public://扩展1
+    bool customSetPositionOffset(long offset);
+    bool customGetPositionOffset(long* offset);
+    
+
+    bool customSetMaxCurrent(float maxCurrent);
+    bool customGetMaxCurrent(float* maxCurrent);
+
+
+
+
+
+    private:
     typedef enum  //set
     {
         setStopModeCode = 2, // 停止电机
@@ -217,31 +255,6 @@ class ti5Motor
     bool readParameter(parameterCodeTableSend1Receive1_4 parameterCode,int32_t *value);
     bool readParameter(parameterCodeTableSend1Receive2_2_4 parameterCode,int16_t *value1,int16_t *value2,int32_t *value3);
     bool writeAndReadParameter(parameterCodeTableSend1_4Receive2_2_4 parameterCode,int32_t value,int16_t *value1,int16_t *value2,int32_t *value3);
-
-    public:
-    bool quickSetMaxSpeed(float maxSpeed);
-    bool quickSetMaxAcceleration(float maxAcceleration);
-    bool quickSetMaxPosition(float maxPosition);
-    bool quickSetMinPosition(float minPosition);
-    bool quickSetEnableStatus(bool status);
-    bool quickSetZero();
-    bool quickClearError();
-    bool quickGetMaxSpeed(float* maxSpeed);
-    bool quickGetMaxAcceleration(float* maxAcceleration);
-    bool quickGetMaxPosition(float* maxPosition);
-    bool quickGetMinPosition(float* minPosition);
-    bool quickGetEnableStatus(bool* status);
-    bool quickGetErrorCode(uint16_t* errorCode);
-
-    public:
-    bool autoMonitor(bool enable);//自动监控
-    bool autoCurrentSpeedPosition(bool enable,uint16_t period);//自动获取当前电流、速度、位置 单位5ms
-    float autoCurrent() const;//当前电流
-    float autoSpeed() const;//当前速度
-    float autoPosition() const;//当前位置
-
-
-    private:
 
     CanDriver* _canDriver = nullptr;
     uint8_t _canId;
