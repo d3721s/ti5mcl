@@ -4,7 +4,7 @@
  * @brief Contains the implementation of a general-purpose exception which may be thrown when an error occurs when performing IO on a CAN socket.
  * @version 0.1
  * @date 2020-07-02
- * 
+ *
  * @copyright Copyright (c) 2020 Simon Cahill
  *
  *  Copyright 2020 Simon Cahill
@@ -48,9 +48,9 @@ namespace sockcanpp { namespace exceptions {
             const int32_t getSocket() const { return _socket; }
 
         private:
-            int32_t _socket;
 
             string _message;
+            int32_t _socket;
     };
 
 } /* exceptions */ } /* sockcanpp */

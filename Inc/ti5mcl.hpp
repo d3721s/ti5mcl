@@ -118,13 +118,8 @@ class ti5Motor
     public://扩展1
     bool customSetPositionOffset(long offset);
     bool customGetPositionOffset(long* offset);
-    
-
     bool customSetMaxCurrent(float maxCurrent);
     bool customGetMaxCurrent(float* maxCurrent);
-
-
-
 
 
     private:

@@ -3,11 +3,9 @@
 namespace ti5mcl {
 
 void ti5Motor::power(bool en) {
-    // 实现power功能
 }
 
 void ti5Motor::reset() {
-    // 实现reset功能
 }
 
 bool ti5Motor::home() {
