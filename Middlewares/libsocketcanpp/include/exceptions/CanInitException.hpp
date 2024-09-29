@@ -42,11 +42,12 @@ namespace sockcanpp
         class CanInitException: public exception
         {
         public: // +++ Constructor / Destructor +++
-            CanInitException(string message): _message(message) { }
+            CanInitException(string message): _message(
+                    message) { }
             virtual ~CanInitException() { }
 
         public: // +++ Override +++
-            const char *what()
+            const char* what()
             {
                 return _message.c_str();
             }

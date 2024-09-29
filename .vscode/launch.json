@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/lenovo/Desktop/ws/ti5mcl/Src",
-      "program": "c:/Users/lenovo/Desktop/ws/ti5mcl/Src/build/Debug/outDebug",
+      "cwd": "c:/Users/lenovo/Desktop/ws/ti5mcl",
+      "program": "c:/Users/lenovo/Desktop/ws/ti5mcl/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

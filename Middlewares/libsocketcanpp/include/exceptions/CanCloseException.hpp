@@ -42,11 +42,12 @@ namespace sockcanpp
         class CanCloseException: public exception
         {
         public: // +++ Constructor / Destructor +++
-            CanCloseException(string message): _message(message) {}
+            CanCloseException(string message): _message(
+                    message) {}
             ~CanCloseException() {}
 
         public: // +++ Overrides +++
-            const char *what()
+            const char* what()
             {
                 return _message.c_str();
             }

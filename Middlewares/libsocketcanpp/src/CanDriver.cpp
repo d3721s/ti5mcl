@@ -78,14 +78,20 @@ namespace sockcanpp
 
 
     #pragma region Object Construction
-    CanDriver::CanDriver(const string &canInterface, int32_t canProtocol,
+    CanDriver::CanDriver(const string& canInterface,
+                         int32_t canProtocol,
                          const CanId defaultSenderId):
-        CanDriver(canInterface, canProtocol, 0 /* match all */, defaultSenderId) {}
+        CanDriver(canInterface, canProtocol,
+                  0 /* match all */, defaultSenderId) {}
 
-    CanDriver::CanDriver(const string &canInterface, const int32_t canProtocol,
-                         const int32_t filterMask, const CanId defaultSenderId):
-        _defaultSenderId(defaultSenderId), _canFilterMask(filterMask),
-        _canProtocol(canProtocol), _canInterface(canInterface)
+    CanDriver::CanDriver(const string& canInterface,
+                         const int32_t canProtocol,
+                         const int32_t filterMask,
+                         const CanId defaultSenderId):
+        _defaultSenderId(defaultSenderId),
+        _canFilterMask(filterMask),
+        _canProtocol(canProtocol),
+        _canInterface(canInterface)
     {
         initialiseSocketCan();
     }
@@ -100,11 +106,13 @@ namespace sockcanpp
      * @return true If messages are available on the bus.
      * @return false Otherwise.
      */
-    bool CanDriver::waitForMessages(milliseconds timeout)
+    bool CanDriver::waitForMessages(milliseconds
+                                    timeout)
     {
         if (_socketFd < 0)
         {
-            throw InvalidSocketException("Invalid socket!", _socketFd);
+            throw InvalidSocketException("Invalid socket!",
+                                         _socketFd);
         }
         unique_lock<mutex> locky(_lock);
         fd_set readFileDescriptors;
@@ -113,14 +121,17 @@ namespace sockcanpp
         waitTime.tv_usec = timeout.count() * 1000;
         FD_ZERO(&readFileDescriptors);
         FD_SET(_socketFd, &readFileDescriptors);
-        const auto fdsAvailable = select(_socketFd + 1, &readFileDescriptors, nullptr,
+        const auto fdsAvailable = select(_socketFd + 1,
+                                         &readFileDescriptors, nullptr,
                                          nullptr, &waitTime);
         int32_t bytesAvailable{0};
-        const auto retCode = ioctl(_socketFd, FIONREAD, &bytesAvailable);
+        const auto retCode = ioctl(_socketFd, FIONREAD,
+                                   &bytesAvailable);
         if (retCode == 0)
         {
-            _queueSize = static_cast<int32_t>(std::ceil(bytesAvailable / sizeof(
-                                                  can_frame)));
+            _queueSize = static_cast<int32_t>(std::ceil(
+                                                  bytesAvailable / sizeof(
+                                                          can_frame)));
         }
         else
         {
@@ -144,7 +155,8 @@ namespace sockcanpp
      *
      * @return CanMessage The message read from the bus.
      */
-    CanMessage CanDriver::readMessageLock(bool const lock)
+    CanMessage CanDriver::readMessageLock(
+        bool const lock)
     {
         unique_ptr<unique_lock<mutex>> locky{nullptr};
         if (lock)
@@ -153,16 +165,19 @@ namespace sockcanpp
         }
         if (0 > _socketFd)
         {
-            throw InvalidSocketException("Invalid socket!", _socketFd);
+            throw InvalidSocketException("Invalid socket!",
+                                         _socketFd);
         }
         ssize_t readBytes{0};
         can_frame canFrame{};
         memset(&canFrame, 0, sizeof(can_frame));
-        readBytes = read(_socketFd, &canFrame, sizeof(can_frame));
+        readBytes = read(_socketFd, &canFrame,
+                         sizeof(can_frame));
         if (0 > readBytes)
         {
-            throw CanException(formatString("FAILED to read from CAN! Error: %d => %s",
-                                            errno, strerror(errno)), _socketFd);
+            throw CanException(
+                formatString("FAILED to read from CAN! Error: %d => %s",
+                             errno, strerror(errno)), _socketFd);
         }
         return CanMessage{canFrame};
     }
@@ -175,30 +190,36 @@ namespace sockcanpp
      *
      * @return ssize_t The amount of bytes sent on the bus.
      */
-    ssize_t CanDriver::sendMessage(const CanMessage &message, bool forceExtended)
+    ssize_t CanDriver::sendMessage(const CanMessage&
+                                   message, bool forceExtended)
     {
         if (_socketFd < 0)
         {
-            throw InvalidSocketException("Invalid socket!", _socketFd);
+            throw InvalidSocketException("Invalid socket!",
+                                         _socketFd);
         }
         unique_lock<mutex> locky(_lockSend);
         ssize_t bytesWritten = 0;
-        if (message.getFrameData().size() > CAN_MAX_DATA_LENGTH)
+        if (message.getFrameData().size() >
+                CAN_MAX_DATA_LENGTH)
         {
             throw CanException(
                 formatString("INVALID data length! Message must be smaller than %d bytes!",
                              CAN_MAX_DATA_LENGTH), _socketFd);
         }
         auto canFrame = message.getRawFrame();
-        if (forceExtended || ((uint32_t)message.getCanId() > CAN_SFF_MASK))
+        if (forceExtended
+                || ((uint32_t)message.getCanId() > CAN_SFF_MASK))
         {
             canFrame.can_id |= CAN_EFF_FLAG;
         }
-        bytesWritten = write(_socketFd, (const void *)&canFrame, sizeof(canFrame));
+        bytesWritten = write(_socketFd,
+                             (const void*)&canFrame, sizeof(canFrame));
         if (bytesWritten == -1)
         {
             throw CanException(
-                formatString("FAILED to write data to socket! Error: %d => %s", errno,
+                formatString("FAILED to write data to socket! Error: %d => %s",
+                             errno,
                              strerror(errno)), _socketFd);
         }
         return bytesWritten;
@@ -213,17 +234,20 @@ namespace sockcanpp
      *
      * @return int32_t The total amount of bytes sent.
      */
-    ssize_t CanDriver::sendMessageQueue(queue<CanMessage> messages,
-                                        milliseconds delay, bool forceExtended)
+    ssize_t CanDriver::sendMessageQueue(
+        queue<CanMessage> messages,
+        milliseconds delay, bool forceExtended)
     {
         if (_socketFd < 0)
         {
-            throw InvalidSocketException("Invalid socket!", _socketFd);
+            throw InvalidSocketException("Invalid socket!",
+                                         _socketFd);
         }
         ssize_t totalBytesWritten = 0;
         while (!messages.empty())
         {
-            totalBytesWritten += sendMessage(messages.front(), forceExtended);
+            totalBytesWritten += sendMessage(messages.front(),
+                                             forceExtended);
             messages.pop();
         }
         return totalBytesWritten;
@@ -238,7 +262,8 @@ namespace sockcanpp
     {
         if (_socketFd < 0)
         {
-            throw InvalidSocketException("Invalid socket!", _socketFd);
+            throw InvalidSocketException("Invalid socket!",
+                                         _socketFd);
         }
         unique_lock<mutex> locky{_lock};
         queue<CanMessage> messages{};
@@ -254,17 +279,20 @@ namespace sockcanpp
      *
      * @param mask The bit mask to apply.
      */
-    void CanDriver::setCanFilterMask(const int32_t mask)
+    void CanDriver::setCanFilterMask(const int32_t
+                                     mask)
     {
         if (_socketFd < 0)
         {
-            throw InvalidSocketException("Invalid socket!", _socketFd);
+            throw InvalidSocketException("Invalid socket!",
+                                         _socketFd);
         }
         unique_lock<mutex> locky(_lock);
         can_filter canFilter;
         canFilter.can_id   = _defaultSenderId;
         canFilter.can_mask = mask;
-        if (setsockopt(_socketFd, SOL_CAN_RAW, CAN_RAW_FILTER, &canFilter,
+        if (setsockopt(_socketFd, SOL_CAN_RAW,
+                       CAN_RAW_FILTER, &canFilter,
                        sizeof(canFilter)) == -1)
         {
             throw CanInitException(
@@ -293,15 +321,19 @@ namespace sockcanpp
         int32_t tmpReturn;
         memset(&address, 0, sizeof(struct sockaddr_can));
         memset(&ifaceRequest, 0, sizeof(struct ifreq));
-        _socketFd = socket(PF_CAN, SOCK_RAW, _canProtocol);
+        _socketFd = socket(PF_CAN, SOCK_RAW,
+                           _canProtocol);
         if (_socketFd == -1)
         {
             throw CanInitException(
-                formatString("FAILED to initialise socketcan! Error: %d => %s", errno,
+                formatString("FAILED to initialise socketcan! Error: %d => %s",
+                             errno,
                              strerror(errno)));
         }
-        strcpy(ifaceRequest.ifr_name, _canInterface.c_str());
-        if ((tmpReturn = ioctl(_socketFd, SIOCGIFINDEX, &ifaceRequest)) == -1)
+        strcpy(ifaceRequest.ifr_name,
+               _canInterface.c_str());
+        if ((tmpReturn = ioctl(_socketFd, SIOCGIFINDEX,
+                               &ifaceRequest)) == -1)
         {
             throw CanInitException(
                 formatString("FAILED to perform IO control operation on socket %s! Error: %d => %s",
@@ -314,11 +346,13 @@ namespace sockcanpp
         address.can_family = AF_CAN;
         address.can_ifindex = ifaceRequest.ifr_ifindex;
         setCanFilterMask(_canFilterMask);
-        if ((tmpReturn = bind(_socketFd, (struct sockaddr *)&address,
+        if ((tmpReturn = bind(_socketFd,
+                              (struct sockaddr*)&address,
                               sizeof(address))) == -1)
         {
             throw CanInitException(
-                formatString("FAILED to bind to socket CAN! Error: %d => %s", errno,
+                formatString("FAILED to bind to socket CAN! Error: %d => %s",
+                             errno,
                              strerror(errno)));
         }
     }
@@ -336,7 +370,8 @@ namespace sockcanpp
         if (close(_socketFd) == -1)
         {
             throw CanCloseException(
-                formatString("FAILED to close CAN socket! Error: %d => %s", errno,
+                formatString("FAILED to close CAN socket! Error: %d => %s",
+                             errno,
                              strerror(errno)));
         }
         _socketFd = -1;

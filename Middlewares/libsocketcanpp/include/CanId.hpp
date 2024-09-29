@@ -49,10 +49,12 @@ namespace sockcanpp
     struct CanId
     {
     public: // +++ Constructors +++
-        constexpr CanId(const CanId &id) = default;
+        constexpr CanId(const CanId& id) = default;
         constexpr CanId() = default;
-        constexpr CanId(const canid_t id): m_identifier(id) { }
-        constexpr CanId(const int32_t id): m_identifier(id) { }
+        constexpr CanId(const canid_t id): m_identifier(
+                id) { }
+        constexpr CanId(const int32_t id): m_identifier(
+                id) { }
 
     public: // +++ Operators +++
         constexpr canid_t operator *() const
@@ -63,11 +65,13 @@ namespace sockcanpp
         #pragma region "Conversions"
         constexpr operator int16_t()  const
         {
-            return static_cast<int16_t>(m_identifier) & CAN_ERR_MASK;
+            return static_cast<int16_t>(m_identifier) &
+                   CAN_ERR_MASK;
         }
         constexpr operator uint16_t() const
         {
-            return static_cast<uint16_t>(m_identifier) & CAN_ERR_MASK;
+            return static_cast<uint16_t>(m_identifier) &
+                   CAN_ERR_MASK;
         }
         constexpr operator int32_t()  const
         {
@@ -81,65 +85,76 @@ namespace sockcanpp
 
         #pragma region "Bitwise Operators"
         template<typename T>
-        constexpr CanId    operator &(const T x)        const
+        constexpr CanId    operator &(const T x)
+        const
         {
             return m_identifier &
                    x;    //!< Performs a bitwise AND operation on this ID and another.
         }
-        constexpr CanId    operator &(const CanId &x)   const
+        constexpr CanId    operator &(const CanId& x)
+        const
         {
             return m_identifier &
                    x.m_identifier;    //!< Performs a bitwise AND operation on this ID and another.
         }
 
         template<typename T>
-        constexpr CanId    operator |(const T x)        const
+        constexpr CanId    operator |(const T x)
+        const
         {
             return m_identifier |
                    x;    //!< Performs a bitwise OR operation on this ID and a 16-bit integer.
         }
-        constexpr CanId    operator |(const CanId &x)   const
+        constexpr CanId    operator |(const CanId& x)
+        const
         {
             return m_identifier |
                    x.m_identifier;    //!< Performs a bitwise OR operation on this ID and another.
         }
 
         template<typename T>
-        constexpr CanId    operator ^(const T x)        const
+        constexpr CanId    operator ^(const T x)
+        const
         {
             return m_identifier ^
                    x;    //!< Performs a bitwise XOR operation on this ID and a 16-bit integer.
         }
-        constexpr CanId    operator ^(const CanId &x)   const
+        constexpr CanId    operator ^(const CanId& x)
+        const
         {
             return m_identifier ^
                    x.m_identifier;    //!< Performs a bitwise XOR operation on this ID and another.
         }
 
-        constexpr CanId    operator ~()                 const
+        constexpr CanId    operator ~()
+        const
         {
             return ~m_identifier;    //!< Performs a bitwise NOT operation on this ID.
         }
 
         template<typename T>
-        constexpr CanId    operator <<(const T x)       const
+        constexpr CanId    operator <<(const T x)
+        const
         {
             return m_identifier <<
                    x;    //!< Shifts this ID to the left by a 16-bit integer.
         }
-        constexpr CanId    operator <<(const CanId &x)  const
+        constexpr CanId    operator <<(const CanId& x)
+        const
         {
             return m_identifier <<
                    x.m_identifier;    //!< Shifts this ID to the left by another.
         }
 
         template<typename T>
-        constexpr CanId    operator >>(const T x)       const
+        constexpr CanId    operator >>(const T x)
+        const
         {
             return m_identifier >>
                    x;    //!< Shifts this ID to the right by a 16-bit integer.
         }
-        constexpr CanId    operator >>(const CanId &x)  const
+        constexpr CanId    operator >>(const CanId& x)
+        const
         {
             return m_identifier >>
                    x.m_identifier;    //!< Shifts this ID to the right by another.
@@ -151,7 +166,7 @@ namespace sockcanpp
             return m_identifier <<=
                        x;    //!< Shifts this ID to the left by a 16-bit integer.
         }
-        CanId    operator <<=(const CanId &x)
+        CanId    operator <<=(const CanId& x)
         {
             return m_identifier <<=
                        x.m_identifier;    //!< Shifts this ID to the left by another.
@@ -163,7 +178,7 @@ namespace sockcanpp
             return m_identifier >>=
                        x;    //!< Shifts this ID to the right by a 16-bit integer.
         }
-        CanId    operator >>=(const CanId &x)
+        CanId    operator >>=(const CanId& x)
         {
             return m_identifier >>=
                        x.m_identifier;    //!< Shifts this ID to the right by another.
@@ -172,9 +187,10 @@ namespace sockcanpp
         #pragma endregion
 
         #pragma region "Comparison Operators"
-        constexpr bool operator ==(const CanId &x)   const
+        constexpr bool operator ==(const CanId& x)   const
         {
-            return m_identifier == x.m_identifier;    //!< Compares this ID to another.
+            return m_identifier ==
+                   x.m_identifier;    //!< Compares this ID to another.
         }
 
         template<typename T>
@@ -184,9 +200,10 @@ namespace sockcanpp
                    (x);    //!< Compares this ID to another.
         }
 
-        constexpr bool operator !=(const CanId &x)   const
+        constexpr bool operator !=(const CanId& x)   const
         {
-            return m_identifier != x.m_identifier;    //!< Compares this ID to another.
+            return m_identifier !=
+                   x.m_identifier;    //!< Compares this ID to another.
         }
 
         template<typename T>
@@ -213,13 +230,15 @@ namespace sockcanpp
         template<typename T>
         constexpr bool operator <=(const T x)        const
         {
-            return x.m_identifier <= m_identifier;    //!< Compares this ID to another.
+            return x.m_identifier <=
+                   m_identifier;    //!< Compares this ID to another.
         }
 
         template<typename T>
         constexpr bool operator >=(const T x)        const
         {
-            return x.m_identifier >= m_identifier;    //!< Compares this ID to another.
+            return x.m_identifier >=
+                   m_identifier;    //!< Compares this ID to another.
         }
         #pragma endregion
 
@@ -227,12 +246,14 @@ namespace sockcanpp
         template<typename T>
         constexpr CanId operator =(const T val)
         {
-            return CanId(val);    //!< Assigns a new integer to this CanID
+            return CanId(
+                       val);    //!< Assigns a new integer to this CanID
         }
 
         constexpr CanId operator =(const int64_t val)
         {
-            return operator =((canid_t)val);    //!< Assigns a 64-bit integer to this ID.
+            return operator =((canid_t)
+                              val);    //!< Assigns a 64-bit integer to this ID.
         }
         #pragma endregion
 
@@ -310,7 +331,8 @@ namespace sockcanpp
         template<typename T>
         static constexpr bool isValidIdentifier(T value)
         {
-            return static_cast<canid_t>(value) <= CAN_EFF_MASK;
+            return static_cast<canid_t>(value) <=
+                   CAN_EFF_MASK;
         }
 
         /**
@@ -336,7 +358,8 @@ namespace sockcanpp
          * @return false Otherwise.
          */
         template<typename T>
-        static constexpr bool isRemoteTransmissionRequest(T value)
+        static constexpr bool isRemoteTransmissionRequest(
+            T value)
         {
             return static_cast<canid_t>(value) & CAN_RTR_FLAG;
         }
@@ -378,7 +401,7 @@ namespace sockcanpp
         }
 
     public: // +++ Equality Checks +++
-        constexpr bool equals(const CanId &otherId) const
+        constexpr bool equals(const CanId& otherId) const
         {
             return m_identifier ==
                    otherId.m_identifier;    //!< Compares this ID to another.

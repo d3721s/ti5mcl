@@ -42,12 +42,13 @@ namespace sockcanpp
         class InvalidSocketException: public exception
         {
         public: // +++ Constructor / Destructor +++
-            InvalidSocketException(string message, int32_t socket): _message(message),
+            InvalidSocketException(string message,
+                                   int32_t socket): _message(message),
                 _socket(socket) {}
             ~InvalidSocketException() {}
 
         public: // +++ Overrides +++
-            const char *what()
+            const char* what()
             {
                 return _message.c_str();
             }

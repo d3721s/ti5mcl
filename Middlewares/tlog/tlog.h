@@ -77,8 +77,8 @@ struct tlog_time
 struct tlog_loginfo
 {
     tlog_level level;
-    const char *file;
-    const char *func;
+    const char* file;
+    const char* func;
     int line;
     struct tlog_time time;
 } __attribute__((packed));
@@ -95,14 +95,20 @@ format: Log formats
 #endif
 #define tlog(level, format, ...) tlog_ext(level, BASE_FILE_NAME, __LINE__, __func__, NULL, format, ##__VA_ARGS__)
 
-extern int tlog_ext(tlog_level level, const char *file, int line,
-                    const char *func, void *userptr, const char *format, ...)
-__attribute__((format(printf, 6, 7))) __attribute__((nonnull(6)));
-extern int tlog_vext(tlog_level level, const char *file, int line,
-                     const char *func, void *userptr, const char *format, va_list ap);
+extern int tlog_ext(tlog_level level,
+                    const char* file, int line,
+                    const char* func, void* userptr,
+                    const char* format, ...)
+__attribute__((format(printf, 6,
+                      7))) __attribute__((nonnull(6)));
+extern int tlog_vext(tlog_level level,
+                     const char* file, int line,
+                     const char* func, void* userptr,
+                     const char* format, va_list ap);
 
 /* write buff to log file */
-extern int tlog_write_log(char *buff, int bufflen);
+extern int tlog_write_log(char* buff,
+                          int bufflen);
 
 /* set log level */
 extern int tlog_setlevel(tlog_level level);
@@ -114,13 +120,14 @@ extern int tlog_log_enabled(tlog_level level);
 extern tlog_level tlog_getlevel(void);
 
 /* set log file */
-extern void tlog_set_logfile(const char *logfile);
+extern void tlog_set_logfile(const char* logfile);
 
 /* enable log to screen */
 extern void tlog_setlogscreen(int enable);
 
 /* Get log level in string */
-extern const char *tlog_get_level_string(tlog_level level);
+extern const char* tlog_get_level_string(
+    tlog_level level);
 
 /* set max log count */
 extern void tlog_set_maxlog_count(int count);
@@ -133,7 +140,8 @@ maxlogcount: Number of archived logs.
 buffsize: Buffer size, zero for default (128K)
 flag: read tlog flags
  */
-extern int tlog_init(const char *logfile, int maxlogsize, int maxlogcount,
+extern int tlog_init(const char* logfile,
+                     int maxlogsize, int maxlogcount,
                      int buffsize, unsigned int flag);
 
 /* flush pending log message, and exit tlog */
@@ -147,35 +155,44 @@ steps:
 
 read _tlog_format for example.
 */
-typedef int (*tlog_format_func)(char *buff, int maxlen,
-                                struct tlog_loginfo *info, void *userptr, const char *format, va_list ap);
-extern int tlog_reg_format_func(tlog_format_func callback);
+typedef int (*tlog_format_func)(char* buff,
+                                int maxlen,
+                                struct tlog_loginfo* info, void* userptr,
+                                const char* format, va_list ap);
+extern int tlog_reg_format_func(tlog_format_func
+                                callback);
 
 /* register log output callback
  Note: info is invalid when flag TLOG_SEGMENT is not set.
  */
-typedef int (*tlog_log_output_func)(struct tlog_loginfo *info, const char *buff,
-                                    int bufflen, void *private_data);
-extern int tlog_reg_log_output_func(tlog_log_output_func output,
-                                    void *private_data);
+typedef int (*tlog_log_output_func)(
+    struct tlog_loginfo* info, const char* buff,
+    int bufflen, void* private_data);
+extern int tlog_reg_log_output_func(
+    tlog_log_output_func output,
+    void* private_data);
 
 /* enable early log to screen */
-extern void tlog_set_early_printf(int enable, int no_prefix, int color);
+extern void tlog_set_early_printf(int enable,
+                                  int no_prefix, int color);
 
 /* set early log callback */
-typedef void (*tlog_early_print_func)(struct tlog_loginfo *loginfo,
-                                      const char *format, va_list ap);
-extern void tlog_reg_early_printf_callback(tlog_early_print_func callback);
+typedef void (*tlog_early_print_func)(
+    struct tlog_loginfo* loginfo,
+    const char* format, va_list ap);
+extern void tlog_reg_early_printf_callback(
+    tlog_early_print_func callback);
 
 /* set early log output callback */
-extern void tlog_reg_early_printf_output_callback(tlog_log_output_func callback,
-        int log_screen, void *private_data);
+extern void tlog_reg_early_printf_output_callback(
+    tlog_log_output_func callback,
+    int log_screen, void* private_data);
 
 struct tlog_log;
 typedef struct tlog_log tlog_log;
 
 /* get root log handler */
-extern tlog_log *tlog_get_root(void);
+extern tlog_log* tlog_get_root(void);
 
 /*
 Function: open a new log stream, handler should close by tlog_close
@@ -186,25 +203,30 @@ buffsize: Buffer size, zero for default (128K)
 flag: read tlog flags
 return: log stream handler.
 */
-extern tlog_log *tlog_open(const char *logfile, int maxlogsize, int maxlogcount,
+extern tlog_log* tlog_open(const char* logfile,
+                           int maxlogsize, int maxlogcount,
                            int buffsize, unsigned int flag);
 
 /* write buff to log file */
-extern int tlog_write(struct tlog_log *log, const char *buff, int bufflen);
+extern int tlog_write(struct tlog_log* log,
+                      const char* buff, int bufflen);
 
 /* close log stream */
-extern void tlog_close(tlog_log *log);
+extern void tlog_close(tlog_log* log);
 
 /* change log file */
-extern void tlog_rename_logfile(struct tlog_log *log, const char *logfile);
+extern void tlog_rename_logfile(struct tlog_log*
+                                log, const char* logfile);
 
 /*
 Function: Print log to log stream
 log: log stream
 format: Log formats
 */
-extern int tlog_printf(tlog_log *log, const char *format,
-                       ...) __attribute__((format(printf, 2, 3))) __attribute__((nonnull(1, 2)));
+extern int tlog_printf(tlog_log* log,
+                       const char* format,
+                       ...) __attribute__((format(printf, 2,
+                               3))) __attribute__((nonnull(1, 2)));
 
 /*
 Function: Print log to log stream with ap
@@ -212,30 +234,37 @@ log: log stream
 format: Log formats
 va_list: args list
 */
-extern int tlog_vprintf(tlog_log *log, const char *format, va_list ap);
+extern int tlog_vprintf(tlog_log* log,
+                        const char* format, va_list ap);
 
 /* enable log to screen */
-extern void tlog_logscreen(tlog_log *log, int enable);
+extern void tlog_logscreen(tlog_log* log,
+                           int enable);
 
 /* register output callback */
-typedef int (*tlog_output_func)(struct tlog_log *log, const char *buff,
+typedef int (*tlog_output_func)(struct tlog_log*
+                                log, const char* buff,
                                 int bufflen);
-extern int tlog_reg_output_func(tlog_log *log, tlog_output_func output);
+extern int tlog_reg_output_func(tlog_log* log,
+                                tlog_output_func output);
 
 /* set private data */
-extern void tlog_set_private(tlog_log *log, void *private_data);
+extern void tlog_set_private(tlog_log* log,
+                             void* private_data);
 
 /* get private data */
-extern void *tlog_get_private(tlog_log *log);
+extern void* tlog_get_private(tlog_log* log);
 
 /* get local time */
-extern int tlog_localtime(struct tlog_time *tm);
+extern int tlog_localtime(struct tlog_time* tm);
 
 /* set max line size */
-extern void tlog_set_maxline_size(struct tlog_log *log, int size);
+extern void tlog_set_maxline_size(struct tlog_log*
+                                  log, int size);
 
 /* set max log count */
-extern void tlog_logcount(struct tlog_log *log, int count);
+extern void tlog_logcount(struct tlog_log* log,
+                          int count);
 
 /*
 Function: set log file and archive permission
@@ -244,19 +273,22 @@ file: log file permission, default is 640
 archive: archive file permission, default is 440
 */
 
-extern void tlog_set_permission(struct tlog_log *log, mode_t file,
+extern void tlog_set_permission(struct tlog_log*
+                                log, mode_t file,
                                 mode_t archive);
 
 /* Utility function, output colored logs to standard output */
-extern int tlog_stdout_with_color(tlog_level level, const char *buff,
+extern int tlog_stdout_with_color(tlog_level
+                                  level, const char* buff,
                                   int bufflen);
 
 #ifdef __cplusplus
 class Tlog
 {
 public:
-    Tlog(tlog_level level, const char *file, int line, const char *func,
-         void *userptr)
+    Tlog(tlog_level level, const char* file, int line,
+         const char* func,
+         void* userptr)
     {
         level_ = level;
         file_ = file;
@@ -267,27 +299,28 @@ public:
 
     ~Tlog()
     {
-        tlog_ext(level_, file_, line_, func_, userptr_, "%s", msg_.str().c_str());
+        tlog_ext(level_, file_, line_, func_, userptr_,
+                 "%s", msg_.str().c_str());
     }
 
-    std::ostream &Stream()
+    std::ostream& Stream()
     {
         return msg_;
     }
 
 private:
     tlog_level level_;
-    const char *file_;
+    const char* file_;
     int line_;
-    const char *func_;
-    void *userptr_;
+    const char* func_;
+    void* userptr_;
     std::ostringstream msg_;
 };
 
 class TlogOut
 {
 public:
-    TlogOut(tlog_log *log)
+    TlogOut(tlog_log* log)
     {
         log_ = log;
     }
@@ -301,13 +334,13 @@ public:
         tlog_printf(log_, "%s", msg_.str().c_str());
     }
 
-    std::ostream &Stream()
+    std::ostream& Stream()
     {
         return msg_;
     }
 
 private:
-    tlog_log *log_;
+    tlog_log* log_;
     std::ostringstream msg_;
 };
 

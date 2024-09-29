@@ -57,20 +57,24 @@ namespace sockcanpp
     {
     public: // +++ Constructor / Destructor +++
         CanMessage(const struct can_frame frame):
-            _canIdentifier(frame.can_id), _frameData((const char *)frame.data,
-                    frame.can_dlc), _rawFrame(frame) { }
+            _canIdentifier(frame.can_id),
+            _frameData((const char*)frame.data,
+                       frame.can_dlc), _rawFrame(frame) { }
 
-        CanMessage(const CanId canId, const string frameData): _canIdentifier(canId),
+        CanMessage(const CanId canId,
+                   const string frameData): _canIdentifier(canId),
             _frameData(frameData)
         {
             if (frameData.size() > 8)
             {
-                throw system_error(error_code(0xbadd1c, generic_category()),
+                throw system_error(error_code(0xbadd1c,
+                                              generic_category()),
                                    "Payload too big!");
             }
             struct can_frame rawFrame;
             rawFrame.can_id = canId;
-            memcpy(rawFrame.data, frameData.data(), frameData.size());
+            memcpy(rawFrame.data, frameData.data(),
+                   frameData.size());
             rawFrame.can_dlc = frameData.size();
             _rawFrame = rawFrame;
         }

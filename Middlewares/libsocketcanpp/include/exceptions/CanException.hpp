@@ -42,12 +42,13 @@ namespace sockcanpp
         class CanException: public exception
         {
         public: // +++ Constructor / Destructor +++
-            CanException(string message, int32_t socket): _message(message),
+            CanException(string message,
+                         int32_t socket): _message(message),
                 _socket(socket) {}
             ~CanException() {}
 
         public: // +++ Overrides +++
-            const char *what()
+            const char* what()
             {
                 return _message.c_str();
             }

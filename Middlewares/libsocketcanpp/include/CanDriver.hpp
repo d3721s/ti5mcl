@@ -71,10 +71,13 @@ namespace sockcanpp
             7; //!< A separate CAN protocol, used by certain embedded device OEMs.
 
     public: // +++ Constructor / Destructor +++
-        CanDriver(const string &canInterface, const int32_t canProtocol,
+        CanDriver(const string& canInterface,
+                  const int32_t canProtocol,
                   const CanId defaultSenderId = 0); //!< Constructor
-        CanDriver(const string &canInterface, const int32_t canProtocol,
-                  const int32_t filterMask, const CanId defaultSenderId = 0);
+        CanDriver(const string& canInterface,
+                  const int32_t canProtocol,
+                  const int32_t filterMask,
+                  const CanId defaultSenderId = 0);
         CanDriver() = default;
         virtual ~CanDriver()
         {
@@ -82,9 +85,10 @@ namespace sockcanpp
         }
 
     public: // +++ Getter / Setter +++
-        CanDriver &setDefaultSenderId(const CanId id)
+        CanDriver& setDefaultSenderId(const CanId id)
         {
-            this->_defaultSenderId = id;    //!< Sets the default sender ID
+            this->_defaultSenderId =
+                id;    //!< Sets the default sender ID
             return *this;
         }
 
@@ -107,31 +111,37 @@ namespace sockcanpp
         }
 
     public: // +++ I/O +++
-        virtual bool waitForMessages(milliseconds timeout = milliseconds(
-                                         3000)); //!< Waits for CAN messages to appear
+        virtual bool waitForMessages(milliseconds timeout
+                                     = milliseconds(
+                                           3000)); //!< Waits for CAN messages to appear
 
-        virtual CanMessage
-        readMessage(); //!< Attempts to read a single message from the bus
+        virtual CanMessage readMessage(); //!< Attempts to read a single message from the bus
 
-        virtual ssize_t sendMessage(const CanMessage &message,
-                                    bool forceExtended = false); //!< Attempts to send a single CAN message
-        virtual ssize_t sendMessageQueue(queue<CanMessage> messages,
+        virtual ssize_t sendMessage(const CanMessage&
+                                    message,
+                                    bool forceExtended =
+                                        false); //!< Attempts to send a single CAN message
+        virtual ssize_t sendMessageQueue(queue<CanMessage>
+                                         messages,
                                          milliseconds delay = milliseconds(20),
-                                         bool forceExtended = false); //!< Attempts to send a queue of messages
+                                         bool forceExtended =
+                                             false); //!< Attempts to send a queue of messages
 
-        virtual queue<CanMessage>
-        readQueuedMessages(); //!< Attempts to read all queued messages from the bus
+        virtual queue<CanMessage> readQueuedMessages(); //!< Attempts to read all queued messages from the bus
 
         virtual void setCanFilterMask(const int32_t
                                       mask); //!< Attempts to set a new CAN filter mask to the BIOS
 
     protected: // +++ Socket Management +++
-        virtual void initialiseSocketCan(); //!< Initialises socketcan
-        virtual void uninitialiseSocketCan(); //!< Uninitialises socketcan
+        virtual void
+        initialiseSocketCan(); //!< Initialises socketcan
+        virtual void
+        uninitialiseSocketCan(); //!< Uninitialises socketcan
 
     private:
-        virtual CanMessage readMessageLock(bool const lock =
-                                               true); //!< readMessage deadlock guard
+        virtual CanMessage readMessageLock(
+            bool const lock =
+                true); //!< readMessage deadlock guard
         CanId _defaultSenderId; //!< The ID to send messages with if no other ID was set.
 
         int32_t _canFilterMask; //!< The bit mask used to filter CAN messages
@@ -161,15 +171,19 @@ namespace sockcanpp
      * @return string The formatted string.
      */
     template<typename... Args>
-    string formatString(const string &format, Args... args)
+    string formatString(const string& format,
+                        Args... args)
     {
         using std::unique_ptr;
-        auto stringSize = snprintf(nullptr, 0, format.c_str(),
+        auto stringSize = snprintf(nullptr, 0,
+                                   format.c_str(),
                                    args...) + 1; // +1 for \0
         unique_ptr<char[]> buffer(new char[stringSize]);
-        snprintf(buffer.get(), stringSize, format.c_str(), args...);
+        snprintf(buffer.get(), stringSize, format.c_str(),
+                 args...);
         return string(buffer.get(),
-                      buffer.get() + stringSize - 1); // std::string handles termination for us.
+                      buffer.get() + stringSize -
+                      1); // std::string handles termination for us.
     }
 
 }

@@ -1,7 +1,7 @@
 # depslib dependency file v1.0
 1727404322 source:c:\users\lenovo\desktop\ws\ti5mcl\src\ti5mcl.cpp
 
-1722186873 source:c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\src\candriver.cpp
+1727569528 source:c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\src\candriver.cpp
 	<fcntl.h>
 	<linux/can.h>
 	<linux/can/raw.h>
@@ -27,7 +27,7 @@
 
 1722186873 s/InvalidSocketException.hpp"
 
-1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\candriver.hpp
+1727569528 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\candriver.hpp
 	<mutex>
 	<queue>
 	<string>
@@ -37,7 +37,7 @@
 
 1722186873 e.hpp"
 
-1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\canid.hpp
+1727569528 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\canid.hpp
 	<bitset>
 	<cmath>
 	<exception>
@@ -46,7 +46,7 @@
 
 1722186873 ror>
 
-1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\canmessage.hpp
+1727569528 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\canmessage.hpp
 	<linux/can.h>
 	<cstring>
 	<exception>
@@ -57,21 +57,21 @@
 
 1722186873 "
 
-1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\cancloseexception.hpp
+1727569528 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\cancloseexception.hpp
 	<exception>
 	<string>
 
 1727337734 
 
-1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\canexception.hpp
+1727569528 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\canexception.hpp
 	<exception>
 	<string>
 
-1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\caninitexception.hpp
+1727569528 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\caninitexception.hpp
 	<exception>
 	<string>
 
-1722186873 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\invalidsocketexception.hpp
+1727569528 c:\users\lenovo\desktop\ws\ti5mcl\middlewares\libsocketcanpp\include\exceptions\invalidsocketexception.hpp
 	<exception>
 	<string>
 

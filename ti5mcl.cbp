@@ -16,7 +16,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-Wall" />
-					<Add option="-std=gnu++20" />
+					<Add option="-std=c++20" />
 					<Add option="-std=c17" />
 					<Add option="-fPIC" />
 					<Add directory="C:/Users/lenovo/Desktop/ws/ti5mcl/" />
@@ -53,7 +53,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-std=gnu++20" />
+			<Add option="-std=c++20" />
 			<Add option="-fPIC" />
 			<Add directory="Inc" />
 			<Add directory="Middlewares/libsocketcanpp" />

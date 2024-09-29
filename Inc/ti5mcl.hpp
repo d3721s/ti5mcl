@@ -12,6 +12,7 @@
 #include <exceptions/InvalidSocketException.hpp>
 #include "tlog.h"
 
+
 #define LOGLEVEL TLOG_DEBUG
 #warning "LOGLEVEL"
 
@@ -21,6 +22,8 @@
 #ifndef LOGLEVEL
 #define LOGLEVEL TLOG_WARN
 #endif
+
+constexpr float PI = 3.1416;
 
 namespace ti5mcl
 {
@@ -37,19 +40,23 @@ namespace ti5mcl
             reductionRatio101 = 101,
             reductionRatio121 = 121,
         } reductionRatio;
-        ti5Motor(uint8_t canId, reductionRatio reductionRatio)
+        ti5Motor(uint8_t canId,
+                 reductionRatio reductionRatio)
         {
             static once_flag canDriverInitializedFlag;
             static once_flag tlogInitializedFlag;
-            call_once(canDriverInitializedFlag, [this]() mutable
+            call_once(canDriverInitializedFlag, [this]()
+                      mutable
             {
                 try
                 {
-                    _canDriver = make_unique<CanDriver>(CANINTERFACE, CAN_RAW);
+                    _canDriver = make_unique<CanDriver>(CANINTERFACE,
+                                                        CAN_RAW);
                 }
-                catch (exceptions::CanInitException &ex)
+                catch (exceptions::CanInitException& ex)
                 {
-                    cerr << "An error occurred while initialising CanDriver: " << ex.what()
+                    cerr << "An error occurred while initialising CanDriver: "
+                         << ex.what()
                          << endl;
                     exit(1);
                 }
@@ -58,9 +65,10 @@ namespace ti5mcl
             {
                 try
                 {
-                    tlog_init("ti5motor.log", 1048576, 8, 0, TLOG_SCREEN | TLOG_SCREEN_COLOR);
+                    tlog_init("ti5motor.log", 1048576, 8, 0,
+                              TLOG_SCREEN | TLOG_SCREEN_COLOR);
                 }
-                catch (exception &e)
+                catch (exception& e)
                 {
                     cerr << "log system init error" << e.what()
                          << endl;
@@ -80,13 +88,16 @@ namespace ti5mcl
 
     public://常用1
 
-        void power(bool en);//软件启动
-        void reset();//清楚错误 无返回,建议使用this->autoMonitor()管理错误！
+        bool power(bool en);//使能控制
+        bool reset();//清楚错误,建议使用this->autoMonitor()管理错误！
         bool home();//回原点
         bool halt();//急停
-        bool moveAbsolute(long position, long velocity); //绝对运动
-        bool moveRelative(long distance, long velocity); //相对运动
-        bool moveVelocity(long velocity, bool positionControlled);//速度运动
+        bool moveAbsolute(float position,
+                          float velocity); //绝对运动
+        bool moveRelative(float distance,
+                          float velocity); //相对运动
+        bool moveVelocity(float velocity,
+                          bool positionControlled,float position);//速度运动
 
         typedef enum
         {
@@ -94,25 +105,35 @@ namespace ti5mcl
             DIRECTIONNEGATIVE = 1,//负向
         } Direction;//方向
 
-        bool moveJog(Direction direction, long velocity,
+        bool moveJog(Direction direction, float velocity,
                      bool positionControlled); //点动
 
 
     public://常用2
-        bool quickSetMaxSpeed(float maxSpeed);//设置最大速度
-        bool quickSetMaxAcceleration(float maxAcceleration);//设置最大加速度
-        bool quickSetMaxPosition(float maxPosition); //设置最大位置
-        bool quickSetMinPosition(float minPosition); //设置最小位置
-        bool quickSetEnableStatus(bool status); //设置使能状态
-        bool quickSetZero(); //设置零点
-        bool quickClearError(); //清除错误
-        bool quickGetMaxSpeed(float *maxSpeed); //获取最大速度
-        bool quickGetMaxAcceleration(float *maxAcceleration); //获取最大加速度
-        bool quickGetMaxPosition(float *maxPosition); //获取最大位置
-        bool quickGetMinPosition(float *minPosition); //获取最小位置
-        bool quickGetEnableStatus(bool *status); //获取使能状态
-        bool quickGetErrorCode(uint16_t *errorCode); //获取错误码
-
+        bool quickSetMaxSpeed(float
+                              maxSpeed);//设置最大速度
+        bool quickSetMaxAcceleration(float
+                                     maxAcceleration);//设置最大加速度
+        bool quickSetMaxPosition(float
+                                 maxPosition); //设置最大位置
+        bool quickSetMinPosition(float
+                                 minPosition); //设置最小位置
+        bool quickSetEnableStatus(bool
+                                  status); //设置指令使能状态
+        bool quickGetMaxSpeed(float*
+                              maxSpeed); //获取最大速度
+        bool quickGetMaxAcceleration(float*
+                                     maxAcceleration); //获取最大加速度
+        bool quickGetMaxPosition(float*
+                                 maxPosition); //获取最大位置
+        bool quickGetMinPosition(float*
+                                 minPosition); //获取最小位置
+        bool quickGetEnableStatus(bool*
+                                  status); //获取使能状态
+        bool quickGetMotorTemperature(int16_t*
+                                      temperature); //获取电机温度
+        bool quickGetDriverTemperature(int16_t*
+                                       temperature); //获取驱动器温度
     public://常用3
         bool autoMonitor(bool enable);//自动监控
         bool autoCurrentSpeedPosition(bool enable,
@@ -122,16 +143,50 @@ namespace ti5mcl
         float autoPosition() const;//当前位置
 
     public://扩展1
-        bool customSetPositionOffset(long offset);//设置位置偏移
-        bool customGetPositionOffset(long *offset);//获取位置偏移
-        bool customSetMaxCurrent(float maxCurrent);//设置最大电流
-        bool customGetMaxCurrent(float *maxCurrent);//获取最大电流
+
+        bool customSetMaxCurrent(int32_t
+                                 maxCurrent);//设置最大电流
+        bool customGetMaxCurrent(int32_t*
+                                 maxCurrent);//获取最大电流
+        bool customGetErrorStatus(uint16_t*
+                                  errorStatus);//获取错误状态
+        bool quickGetPositionOffset(int32_t*
+                                    offset);//获取位置偏移 /*注意单位*/
+        bool quickSetPositionOffset(int32_t
+                                    offset);//设置位置偏移 /*注意单位*/
+
+        bool customGetSpeedProportional(int32_t*
+                                        proportional); //获取速度环比例
+        bool customGetSpeedIntegral(int32_t*
+                                    integral); //获取速度积分
+        // bool customGetSpeedDerivative(int32_t *derivative); //获取速度微分
+        bool customGetPositionProportional(
+            int32_t* proportional); //获取位置环比例
+        // bool customGetPositionIntegral(int32_t *integral); //获取位置积分
+        bool customGetPositionDerivative(int32_t*
+                                         derivative); //获取位置微分
+        bool customGetVoltage(int32_t*
+                              voltage);  //获取母线电压
+        bool customRestoreFromFlash();//从Flash恢复参数
+        bool customSaveToFlash();//保存参数到Flash
+        bool customRestoreFactory();//恢复出厂设置
+        // bool customStoreToFactory();//储存参数到出厂
+
+        bool customGetMotorModel(int32_t*
+                                 model); //获取电机型号
+        bool customGetMotorVersion(int32_t*
+                                   version); //获取电机版本号
+        bool customGetDriverVersion(int32_t*
+                                    version); //获取驱动器软件版本号
+        bool customGetCurrentSpeedPosition();
+        bool customGetEncoderVoltage(int32_t* voltage);
+        bool customGetEncoderStatus(uint16_t* status);
 
 
     private:
         typedef enum  //set
         {
-            setStopModeCode = 2, // 停止电机
+            setStopModeCode1 = 2, // 停止电机
             setCleanErrorCode = 11, // 清除错误
             setRestoreFromFlashCode = 13,     // 从Flash恢复参数
             setSaveToFlashCode = 14,          // 保存参数到Flash
@@ -189,7 +244,7 @@ namespace ti5mcl
 
         typedef enum   // set
         {
-            setStopMotorCode = 2, // 停止电机
+            setStopMotorCode5 = 2, // 停止电机
             setCurrentModeCode = 28, // 电流模式
             setVelocityModeCode = 29, // 速度模式
             setPositionModeCode = 30, // 位置模式
@@ -246,31 +301,46 @@ namespace ti5mcl
 #warning "TODO:8 bytes order"
         } parameterCodeTableSend8;
 
-        bool writeParameter(parameterCodeTableSend1 parameterCode);
-        bool writeParameter(parameterCodeTableSend1_4 parameterCode, int32_t value);
-        bool writeParameter(parameterCodeTableSend1_2_2 parameterCode, uint16_t value1,
+        bool writeParameter(parameterCodeTableSend1
+                            parameterCode);
+        bool writeParameter(parameterCodeTableSend1_4
+                            parameterCode, int32_t value);
+        bool writeParameter(parameterCodeTableSend1_2_2
+                            parameterCode, uint16_t value1,
                             uint16_t value2);
-        bool writeParameter(parameterCodeTableSend1_4_1 parameterCode, int32_t value1,
+        bool writeParameter(parameterCodeTableSend1_4_1
+                            parameterCode, int32_t value1,
                             uint8_t value2);
-        bool writeParameter(parameterCodeTableSend1_4_2 parameterCode, int32_t value1,
+        bool writeParameter(parameterCodeTableSend1_4_2
+                            parameterCode, int32_t value1,
                             uint16_t value2);
         //bool writeParameter(parameterCodeTableSend8 parameterCode,uint64_t value);
 #warning "TODO:8 bytes order"
-        bool readParameter(parameterCodeTableSend1Receive1_4 parameterCode,
-                           int32_t *value);
-        bool readParameter(parameterCodeTableSend1Receive2_2_4 parameterCode,
-                           int16_t *value1, int16_t *value2, int32_t *value3);
-        bool writeAndReadParameter(parameterCodeTableSend1_4Receive2_2_4 parameterCode,
-                                   int32_t value, int16_t *value1, int16_t *value2, int32_t *value3);
+        bool readParameter(
+            parameterCodeTableSend1Receive1_4 parameterCode,
+            int32_t* value);
+        bool readParameter(
+            parameterCodeTableSend1Receive2_2_4 parameterCode,
+            int16_t* value1, int16_t* value2,
+            int32_t* value3);
+        bool writeAndReadParameter(
+            parameterCodeTableSend1_4Receive2_2_4
+            parameterCode,
+            int32_t value, int16_t* value1, int16_t* value2,
+            int32_t* value3);
 
         unique_ptr<CanDriver> _canDriver = nullptr;
         uint8_t _canId;
         reductionRatio _reductionRatio;
         can_frame _canFrameSend;
+        can_frame _canFrameReceive;
         bool _status = true;
-        volatile float _autoCurrent = 0.0f;
-        volatile float _autoSpeed = 0.0f;
-        volatile float _autoPosition = 0.0f;
+        bool _autoStatus = false;
+        volatile int32_t _autoCurrent;
+        volatile float _autoSpeed;
+        volatile float _autoPosition;
+        int32_t _autoSpeedRaw;
+        int32_t _autoPositionRaw;
         string _name;
         mutex canMutex;
     };
