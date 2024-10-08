@@ -30,33 +30,33 @@
 
 namespace sockcanpp
 {
-    namespace exceptions
+namespace exceptions
+{
+
+using std::exception;
+using std::string;
+
+/**
+ * @brief An exception that may be thrown when an error occurs while closing a CAN socket.
+ */
+class CanCloseException: public exception
+{
+public: // +++ Constructor / Destructor +++
+    CanCloseException(string message): _message(
+            message) {}
+    ~CanCloseException() {}
+
+public: // +++ Overrides +++
+    const char* what()
     {
+        return _message.c_str();
+    }
 
-        using std::exception;
-        using std::string;
+private:
+    string _message;
+};
 
-        /**
-         * @brief An exception that may be thrown when an error occurs while closing a CAN socket.
-         */
-        class CanCloseException: public exception
-        {
-        public: // +++ Constructor / Destructor +++
-            CanCloseException(string message): _message(
-                    message) {}
-            ~CanCloseException() {}
-
-        public: // +++ Overrides +++
-            const char* what()
-            {
-                return _message.c_str();
-            }
-
-        private:
-            string _message;
-        };
-
-    } /* exceptions */
+} /* exceptions */
 } /* sockcanpp */
 
 #endif // LIBSOCKCANPP_INCLUDE_EXCEPTIONS_CANCLOSEEXCEPTION_HPP

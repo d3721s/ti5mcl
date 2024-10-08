@@ -44,64 +44,64 @@
 namespace sockcanpp
 {
 
-    using std::error_code;
-    using std::generic_category;
-    using std::memcpy;
-    using std::string;
-    using std::system_error;
+using std::error_code;
+using std::generic_category;
+using std::memcpy;
+using std::string;
+using std::system_error;
 
-    /**
-     * @brief Represents a CAN message that was received.
-     */
-    class CanMessage
+/**
+ * @brief Represents a CAN message that was received.
+ */
+class CanMessage
+{
+public: // +++ Constructor / Destructor +++
+    CanMessage(const struct can_frame frame):
+        _canIdentifier(frame.can_id),
+        _frameData((const char*)frame.data,
+                   frame.can_dlc), _rawFrame(frame) { }
+
+    CanMessage(const CanId canId,
+               const string frameData): _canIdentifier(canId),
+        _frameData(frameData)
     {
-    public: // +++ Constructor / Destructor +++
-        CanMessage(const struct can_frame frame):
-            _canIdentifier(frame.can_id),
-            _frameData((const char*)frame.data,
-                       frame.can_dlc), _rawFrame(frame) { }
-
-        CanMessage(const CanId canId,
-                   const string frameData): _canIdentifier(canId),
-            _frameData(frameData)
+        if (frameData.size() > 8)
         {
-            if (frameData.size() > 8)
-            {
-                throw system_error(error_code(0xbadd1c,
-                                              generic_category()),
-                                   "Payload too big!");
-            }
-            struct can_frame rawFrame;
-            rawFrame.can_id = canId;
-            memcpy(rawFrame.data, frameData.data(),
-                   frameData.size());
-            rawFrame.can_dlc = frameData.size();
-            _rawFrame = rawFrame;
+            throw system_error(error_code(0xbadd1c,
+                                          generic_category()),
+                               "Payload too big!");
         }
+        struct can_frame rawFrame;
+        rawFrame.can_id = canId;
+        memcpy(rawFrame.data, frameData.data(),
+               frameData.size());
+        rawFrame.can_dlc = frameData.size();
+        _rawFrame = rawFrame;
+    }
 
-        virtual ~CanMessage() {}
+    virtual ~CanMessage() {}
 
-    public: // +++ Getters +++
-        const CanId getCanId() const
-        {
-            return this->_canIdentifier;
-        }
-        const string getFrameData() const
-        {
-            return this->_frameData;
-        }
-        const can_frame getRawFrame() const
-        {
-            return this->_rawFrame;
-        }
+public: // +++ Getters +++
+    const CanId getCanId() const
+    {
+        return this->_canIdentifier;
+    }
+    const string getFrameData() const
+    {
+        return this->_frameData;
+    }
+    const can_frame getRawFrame() const
+    {
+        return this->_rawFrame;
+    }
 
-    private:
-        CanId _canIdentifier;
+private:
+    CanId _canIdentifier;
 
-        string _frameData;
+    string _frameData;
 
-        struct can_frame _rawFrame;
-    };
+    struct can_frame _rawFrame;
+};
 
 }
 

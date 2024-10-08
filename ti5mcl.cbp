@@ -38,6 +38,7 @@
 				<Option compiler="arm-elf-gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-std=c17" />
 					<Add option="-std=c++20" />
 					<Add option="-fPIC" />
 					<Add directory="C:/Users/lenovo/Desktop/ws/ti5mcl/" />
@@ -59,6 +60,7 @@
 			<Add directory="Middlewares/libsocketcanpp" />
 			<Add directory="Middlewares/libsocketcanpp/include" />
 			<Add directory="Middlewares/tlog" />
+			<Add directory="C:/Users/lenovo/Desktop/ws/ti5mcl/" />
 		</Compiler>
 		<Unit filename="Inc/ti5mcl.hpp" />
 		<Unit filename="Middlewares/libsocketcanpp/include/CanDriver.hpp" />
@@ -69,7 +71,14 @@
 		<Unit filename="Middlewares/libsocketcanpp/include/exceptions/CanInitException.hpp" />
 		<Unit filename="Middlewares/libsocketcanpp/include/exceptions/InvalidSocketException.hpp" />
 		<Unit filename="Middlewares/libsocketcanpp/src/CanDriver.cpp" />
+		<Unit filename="Middlewares/tlog/tlog.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Middlewares/tlog/tlog.h" />
 		<Unit filename="Src/ti5mcl.cpp" />
+		<Unit filename="demo.cpp">
+			<Option target="demo" />
+		</Unit>
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
