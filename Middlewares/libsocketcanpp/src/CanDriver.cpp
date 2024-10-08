@@ -117,8 +117,10 @@ bool CanDriver::waitForMessages(milliseconds
     unique_lock<mutex> locky(_lock);
     fd_set readFileDescriptors;
     timeval waitTime;
-    waitTime.tv_sec = timeout.count() / 1000;
-    waitTime.tv_usec = timeout.count() * 1000;
+//    waitTime.tv_sec = timeout.count() / 1000;
+//    waitTime.tv_usec = timeout.count() * 1000;
+    waitTime.tv_sec = 3;
+    waitTime.tv_usec = 0;
     FD_ZERO(&readFileDescriptors);
     FD_SET(_socketFd, &readFileDescriptors);
     const auto fdsAvailable = select(_socketFd + 1,
@@ -213,6 +215,7 @@ ssize_t CanDriver::sendMessage(const CanMessage&
     {
         canFrame.can_id |= CAN_EFF_FLAG;
     }
+
     bytesWritten = write(_socketFd,
                          (const void*)&canFrame, sizeof(canFrame));
     if (bytesWritten == -1)

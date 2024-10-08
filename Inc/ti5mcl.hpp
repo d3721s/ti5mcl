@@ -52,14 +52,14 @@ public:
         {
             try
             {
-                _canDriver = make_unique<CanDriver>(CANINTERFACE,
-                                                    CAN_RAW);
+                _canDriver = make_shared<CanDriver>(CANINTERFACE,
+                CAN_RAW);
             }
             catch (exceptions::CanInitException& ex)
             {
                 cerr << "An error occurred while initialising CanDriver: "
-                     << ex.what()
-                     << endl;
+                << ex.what()
+                << endl;
                 exit(1);
             }
         });
@@ -68,12 +68,12 @@ public:
             try
             {
                 tlog_init("ti5motor.log", 1048576, 8, 0,
-                          TLOG_SCREEN | TLOG_SCREEN_COLOR);
+                TLOG_SCREEN | TLOG_SCREEN_COLOR);
             }
             catch (exception& e)
             {
                 cerr << "log system init error" << e.what()
-                     << endl;
+                << endl;
                 exit(2);
             }
             tlog_setlevel(LOGLEVEL);
@@ -327,7 +327,7 @@ private:
         int32_t value, int16_t* value1, int16_t* value2,
         int32_t* value3);
 
-    unique_ptr<CanDriver> _canDriver = nullptr;
+    static shared_ptr<CanDriver> _canDriver;
     uint8_t _canId;
     reductionRatio _reductionRatio;
     can_frame _canFrameSend;

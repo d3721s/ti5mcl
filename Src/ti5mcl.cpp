@@ -4,6 +4,8 @@ using namespace sockcanpp;
 using namespace sockcanpp::exceptions;
 namespace ti5mcl
 {
+shared_ptr<CanDriver> ti5Motor::_canDriver;
+
 bool ti5Motor::power(bool en)
 {
     return true;
@@ -43,7 +45,8 @@ bool ti5Motor::moveRelative(float distance,
     tlog_info << "Moving " << to_string(distance) << " with velocity " << to_string(velocity) << endl;
     if (!_autoStatus)
     {
-        readParameter(getPositionCode, &_autoPositionRaw);
+        if(!readParameter(getPositionCode, &_autoPositionRaw))
+            return false;
     }
     return writeParameter(setPositionAndVelocityCode,
                           _autoPositionRaw + distance *
@@ -57,7 +60,7 @@ bool ti5Motor::moveVelocity(float velocity, float position)
     tlog_info << "Moving with velocity " << to_string(velocity) << endl;
     if (!_autoStatus)
         autoCurrentSpeedPosition(1, 400);
-    if (writeParameter(setVelocityModeCode, velocity * static_cast<uint8_t>(_reductionRatio) * 50 / PI) == false)
+    if (!writeParameter(setVelocityModeCode, velocity * static_cast<uint8_t>(_reductionRatio) * 50 / PI))
         return false;
 #warning "timing!"
     while (1)
@@ -105,7 +108,7 @@ bool ti5Motor::quickGetMaxSpeed(float *maxSpeed)
 {
     tlog_info << "Getting max speed!" << endl;
     int32_t _maxSpeedRaw;
-    if (readParameter(getMaxPositiveVelocityCode, &_maxSpeedRaw) == false)
+    if (!readParameter(getMaxPositiveVelocityCode, &_maxSpeedRaw))
         return false;
     *maxSpeed = _maxSpeedRaw * PI / 50 / static_cast<uint8_t>(_reductionRatio);
     return true;
@@ -128,7 +131,7 @@ bool ti5Motor::quickGetMaxPosition(
 {
     int32_t _maxPositionRaw;
     tlog_info << "Getting max position!" << endl;
-    if (readParameter(getMaxPositivePositionCode, &_maxPositionRaw) == false)
+    if (!readParameter(getMaxPositivePositionCode, &_maxPositionRaw))
         return false;
     *maxPosition = _maxPositionRaw * PI / static_cast<uint8_t>(_reductionRatio) / 32768;
     return true;
@@ -140,7 +143,7 @@ bool ti5Motor::quickGetMinPosition(
 {
     tlog_info << "Getting min position!" << endl;
     int32_t _minPositionRaw;
-    if( readParameter(getMaxNegativePositionCode, &_minPositionRaw)==false)
+    if(!readParameter(getMaxNegativePositionCode, &_minPositionRaw))
         return false;
     *minPosition = _minPositionRaw * PI / static_cast<uint8_t>(_reductionRatio) / 32768;
     return true;
@@ -186,6 +189,12 @@ bool ti5Motor::writeParameter(
     _canFrameSend.can_id = this->_canId;
     _canFrameSend.can_dlc = 1;
     _canFrameSend.data[0] = static_cast<uint8_t>(parameterCode);
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data)
+    {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
+    }
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     lock_guard<mutex> lock(canMutex);
     try
     {
@@ -202,11 +211,6 @@ bool ti5Motor::writeParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    std::stringstream ssSend;
-    for (auto i : _canFrameSend.data) {
-        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
-    }
-    tlog_debug << "Sent message!" << ssSend.str() << endl;
     return true;
 }
 bool ti5Motor::writeParameter(
@@ -227,6 +231,12 @@ bool ti5Motor::writeParameter(
     _canFrameSend.data[4] = static_cast<uint8_t>(((
                                 value >> 24) &
                             0xFF));
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data)
+    {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
+    }
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     lock_guard<mutex> lock(canMutex);
     try
     {
@@ -243,11 +253,6 @@ bool ti5Motor::writeParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    std::stringstream ssSend;
-    for (auto i : _canFrameSend.data) {
-        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
-    }
-    tlog_debug << "Sent message!" << ssSend.str() << endl;
     return true;
 }
 
@@ -268,6 +273,12 @@ bool ti5Motor::writeParameter(
     _canFrameSend.data[4] = static_cast<uint8_t>(((
                                 value2 >> 8) &
                             0xFF));
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data)
+    {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
+    }
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     lock_guard<mutex> lock(canMutex);
     try
     {
@@ -284,11 +295,6 @@ bool ti5Motor::writeParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    std::stringstream ssSend;
-    for (auto i : _canFrameSend.data) {
-        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
-    }
-    tlog_debug << "Sent message!" << ssSend.str() << endl;
     return true;
 }
 
@@ -311,6 +317,12 @@ bool ti5Motor::writeParameter(
                                 value1 >> 24) &
                             0xFF));
     _canFrameSend.data[5] = value2;
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data)
+    {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
+    }
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     lock_guard<mutex> lock(canMutex);
     try
     {
@@ -327,11 +339,6 @@ bool ti5Motor::writeParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    std::stringstream ssSend;
-    for (auto i : _canFrameSend.data) {
-        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
-    }
-    tlog_debug << "Sent message!" << ssSend.str() << endl;
     return true;
 }
 
@@ -358,7 +365,14 @@ bool ti5Motor::writeParameter(
     _canFrameSend.data[6] = static_cast<uint8_t>(((
                                 value2 >> 8) &
                             0xFF));
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data)
+    {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
+    }
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     lock_guard<mutex> lock(canMutex);
+
     try
     {
         _canDriver->sendMessage(CanMessage(
@@ -374,11 +388,6 @@ bool ti5Motor::writeParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    std::stringstream ssSend;
-    for (auto i : _canFrameSend.data) {
-        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
-    }
-    tlog_debug << "Sent message!" << ssSend.str() << endl;
     return true;
 }
 
@@ -389,6 +398,13 @@ bool ti5Motor::readParameter(
     _canFrameSend.can_id = this->_canId;
     _canFrameSend.can_dlc = 1;
     _canFrameSend.data[0] = static_cast<uint8_t>(parameterCode);
+
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data)
+    {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
+    }
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     lock_guard<mutex> lock(canMutex);
     try
     {
@@ -405,11 +421,6 @@ bool ti5Motor::readParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    std::stringstream ssSend;
-    for (auto i : _canFrameSend.data) {
-        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
-    }
-    tlog_debug << "Sent message!" << ssSend.str() << endl;
     if (!_canDriver->waitForMessages())
     {
         tlog_error << "Receive Timeout! " << endl;
@@ -423,10 +434,17 @@ bool ti5Motor::readParameter(
             (_canFrameReceive.data[0] != parameterCode))
     {
         tlog_error << "Receive Wrong Message! " << endl;
+        std::stringstream ssReceived;
+        for (auto i : _canFrameReceive.data)
+        {
+            ssReceived << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
+        }
+        tlog_debug << "Received message!" << ssReceived.str() << endl;
         return false;
     }
     std::stringstream ssReceived;
-    for (auto i : _canFrameReceive.data) {
+    for (auto i : _canFrameReceive.data)
+    {
         ssReceived << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
     tlog_debug << "Received message!" << ssReceived.str() << endl;
@@ -445,6 +463,12 @@ bool ti5Motor::readParameter(
     _canFrameSend.can_id = this->_canId;
     _canFrameSend.can_dlc = 1;
     _canFrameSend.data[0] = static_cast<uint8_t>(parameterCode);
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data)
+    {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
+    }
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     lock_guard<mutex> lock(canMutex);
     try
     {
@@ -461,11 +485,6 @@ bool ti5Motor::readParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    std::stringstream ssSend;
-    for (auto i : _canFrameSend.data) {
-        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
-    }
-    tlog_debug << "Sent message!" << ssSend.str() << endl;
     if (!_canDriver->waitForMessages())
     {
         tlog_error << "Receive Timeout! " << endl;
@@ -479,10 +498,17 @@ bool ti5Motor::readParameter(
             (_canFrameReceive.data[0] != parameterCode))
     {
         tlog_error << "Receive Wrong Message! " << endl;
+        std::stringstream ssReceived;
+        for (auto i : _canFrameReceive.data)
+        {
+            ssReceived << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
+        }
+        tlog_debug << "Received message!" << ssReceived.str() << endl;
         return false;
     }
     std::stringstream ssReceived;
-    for (auto i : _canFrameReceive.data) {
+    for (auto i : _canFrameReceive.data)
+    {
         ssReceived << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
     tlog_debug << "Received message!" << ssReceived.str() << endl;
@@ -517,6 +543,12 @@ bool ti5Motor::writeAndReadParameter(
     _canFrameSend.data[4] = static_cast<uint8_t>(((
                                 value >> 24) &
                             0xFF));
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data)
+    {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
+    }
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     lock_guard<mutex> lock(canMutex);
     try
     {
@@ -533,11 +565,6 @@ bool ti5Motor::writeAndReadParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    std::stringstream ssSend;
-    for (auto i : _canFrameSend.data) {
-        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
-    }
-    tlog_debug << "Sent message!" << ssSend.str() << endl;
     if (!_canDriver->waitForMessages())
     {
         tlog_error << "Receive Timeout! " << endl;
@@ -551,10 +578,17 @@ bool ti5Motor::writeAndReadParameter(
             (_canFrameReceive.data[0] != parameterCode))
     {
         tlog_error << "Receive Wrong Message! " << endl;
+        std::stringstream ssReceived;
+        for (auto i : _canFrameReceive.data)
+        {
+            ssReceived << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
+        }
+        tlog_debug << "Received message!" << ssReceived.str() << endl;
         return false;
     }
     std::stringstream ssReceived;
-    for (auto i : _canFrameReceive.data) {
+    for (auto i : _canFrameReceive.data)
+    {
         ssReceived << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
     tlog_debug << "Received message!" << ssReceived.str() << endl;
