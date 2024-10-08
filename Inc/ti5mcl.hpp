@@ -25,7 +25,7 @@
 #define LOGLEVEL TLOG_WARN
 #endif
 
-constexpr double PI = M_PI;
+//constexpr double M_PI = M_PI;
 
 namespace ti5mcl
 {

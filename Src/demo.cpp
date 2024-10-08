@@ -11,9 +11,9 @@ int main()
         M1.home();
         this_thread::sleep_for(std::chrono::seconds(5));
 
-        M1.moveRelative(PI/4,PI/6);
+        M1.moveRelative(M_PI/4,M_PI/6);
         this_thread::sleep_for(std::chrono::seconds(5));
-        M1.moveRelative(-PI/2,PI/6);
+        M1.moveRelative(-M_PI/2,M_PI/6);
         this_thread::sleep_for(std::chrono::seconds(5));
 
 
