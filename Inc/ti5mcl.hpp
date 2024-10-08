@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iomanip>
 #include <chrono>
+#include <cmath>
 
 #include <CanDriver.hpp>
 #include <exceptions/CanException.hpp>
@@ -24,7 +25,7 @@
 #define LOGLEVEL TLOG_WARN
 #endif
 
-constexpr float PI = 3.1416;
+constexpr double PI = M_PI;
 
 namespace ti5mcl
 {
