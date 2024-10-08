@@ -202,12 +202,11 @@ bool ti5Motor::writeParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    string _canFrameSendToString;
-    for (auto i : _canFrameSend.data)
-    {
-        _canFrameSendToString += format("{:02x} ", i);
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data) {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
-    tlog_debug << "Sent message!" << _canFrameSendToString << endl;
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     return true;
 }
 bool ti5Motor::writeParameter(
@@ -244,12 +243,11 @@ bool ti5Motor::writeParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    string _canFrameSendToString;
-    for (auto i : _canFrameSend.data)
-    {
-        _canFrameSendToString += format("{:02x} ", i);
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data) {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
-    tlog_debug << "Sent message!" << _canFrameSendToString << endl;
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     return true;
 }
 
@@ -286,12 +284,11 @@ bool ti5Motor::writeParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    string _canFrameSendToString;
-    for (auto i : _canFrameSend.data)
-    {
-        _canFrameSendToString += format("{:02x} ", i);
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data) {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
-    tlog_debug << "Sent message!" << _canFrameSendToString << endl;
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     return true;
 }
 
@@ -330,12 +327,11 @@ bool ti5Motor::writeParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    string _canFrameSendToString;
-    for (auto i : _canFrameSend.data)
-    {
-        _canFrameSendToString += format("{:02x} ", i);
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data) {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
-    tlog_debug << "Sent message!" << _canFrameSendToString << endl;
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     return true;
 }
 
@@ -378,12 +374,11 @@ bool ti5Motor::writeParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    string _canFrameSendToString;
-    for (auto i : _canFrameSend.data)
-    {
-        _canFrameSendToString += format("{:02x} ", i);
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data) {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
-    tlog_debug << "Sent message!" << _canFrameSendToString << endl;
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     return true;
 }
 
@@ -410,12 +405,11 @@ bool ti5Motor::readParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    string _canFrameSendToString;
-    for (auto i : _canFrameSend.data)
-    {
-        _canFrameSendToString += format("{:02x} ", i);
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data) {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
-    tlog_debug << "Sent message!" << _canFrameSendToString << endl;
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     if (!_canDriver->waitForMessages())
     {
         tlog_error << "Receive Timeout! " << endl;
@@ -431,12 +425,11 @@ bool ti5Motor::readParameter(
         tlog_error << "Receive Wrong Message! " << endl;
         return false;
     }
-    string _canFrameReceiveToString;
-    for (auto i : _canFrameReceive.data)
-    {
-        _canFrameReceiveToString += format("{:02x} ", i);
+    std::stringstream ssReceived;
+    for (auto i : _canFrameReceive.data) {
+        ssReceived << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
-    tlog_debug << "Received message!" << _canFrameReceiveToString << endl;
+    tlog_debug << "Received message!" << ssReceived.str() << endl;
     *value = (_canFrameReceive.data[1]) |
              (_canFrameReceive.data[2] << 8) |
              (_canFrameReceive.data[3]
@@ -468,12 +461,11 @@ bool ti5Motor::readParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    string _canFrameSendToString;
-    for (auto i : _canFrameSend.data)
-    {
-        _canFrameSendToString += format("{:02x} ", i);
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data) {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
-    tlog_debug << "Sent message!" << _canFrameSendToString << endl;
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     if (!_canDriver->waitForMessages())
     {
         tlog_error << "Receive Timeout! " << endl;
@@ -489,12 +481,11 @@ bool ti5Motor::readParameter(
         tlog_error << "Receive Wrong Message! " << endl;
         return false;
     }
-    string _canFrameReceiveToString;
-    for (auto i : _canFrameReceive.data)
-    {
-        _canFrameReceiveToString += format("{:02x} ", i);
+    std::stringstream ssReceived;
+    for (auto i : _canFrameReceive.data) {
+        ssReceived << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
-    tlog_debug << "Received message!" << _canFrameReceiveToString << endl;
+    tlog_debug << "Received message!" << ssReceived.str() << endl;
     *value1 = (_canFrameReceive.data[0]) |
               (_canFrameReceive.data[1] << 8);
     *value2 = (_canFrameReceive.data[2]) |
@@ -542,12 +533,11 @@ bool ti5Motor::writeAndReadParameter(
         tlog_error << "Failed to send test message! " << ex.what() << endl;
         return false;
     }
-    string _canFrameSendToString;
-    for (auto i : _canFrameSend.data)
-    {
-        _canFrameSendToString += format("{:02x} ", i);
+    std::stringstream ssSend;
+    for (auto i : _canFrameSend.data) {
+        ssSend << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
-    tlog_debug << "Sent message!" << _canFrameSendToString << endl;
+    tlog_debug << "Sent message!" << ssSend.str() << endl;
     if (!_canDriver->waitForMessages())
     {
         tlog_error << "Receive Timeout! " << endl;
@@ -563,12 +553,11 @@ bool ti5Motor::writeAndReadParameter(
         tlog_error << "Receive Wrong Message! " << endl;
         return false;
     }
-    string _canFrameReceiveToString;
-    for (auto i : _canFrameReceive.data)
-    {
-        _canFrameReceiveToString += format("{:02x} ", i);
+    std::stringstream ssReceived;
+    for (auto i : _canFrameReceive.data) {
+        ssReceived << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i) << " ";
     }
-    tlog_debug << "Received message!" << _canFrameReceiveToString << endl;
+    tlog_debug << "Received message!" << ssReceived.str() << endl;
     *value1 = (_canFrameReceive.data[0]) |
               (_canFrameReceive.data[1] << 8);
     *value2 = (_canFrameReceive.data[2]) |
