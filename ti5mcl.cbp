@@ -16,7 +16,6 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-Wall" />
-					<Add option="-std=c11" />
 					<Add option="-std=c++14" />
 					<Add option="-fPIC" />
 					<Add directory="C:/Users/lenovo/Desktop/ws/ti5mcl/" />
@@ -39,7 +38,6 @@
 				<Option compiler="arm-elf-gcc" />
 				<Compiler>
 					<Add option="-O2" />
-					<Add option="-std=c11" />
 					<Add option="-std=c++14" />
 					<Add option="-fPIC" />
 					<Add directory="C:/Users/lenovo/Desktop/ws/ti5mcl/" />
@@ -56,7 +54,6 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-std=c11" />
 			<Add option="-std=c++14" />
 			<Add option="-fPIC" />
 			<Add directory="Inc" />
@@ -87,8 +84,6 @@
 		<Unit filename="Src/ti5mcl.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
-			<code_completion />
-			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
