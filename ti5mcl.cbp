@@ -75,10 +75,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Middlewares/tlog/tlog.h" />
-		<Unit filename="Src/ti5mcl.cpp" />
-		<Unit filename="demo.cpp">
+		<Unit filename="Src/demo.cpp">
 			<Option target="demo" />
 		</Unit>
+		<Unit filename="Src/ti5mcl.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

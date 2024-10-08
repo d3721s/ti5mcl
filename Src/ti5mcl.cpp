@@ -84,7 +84,6 @@ bool ti5Motor::quickSetMaxAcceleration(
 {
     tlog_info << "Setting max acceleration to " << to_string(maxAcceleration) << endl;
     return writeParameter(setMaxPositiveAccelerationCode, maxAcceleration * static_cast<uint8_t>(_reductionRatio) * 50 / PI) && writeParameter(setMaxNegativeAccelerationCode, maxAcceleration * static_cast<uint8_t>(_reductionRatio) * 50 / PI);
-    ;
 }
 
 bool ti5Motor::quickSetMaxPosition(
