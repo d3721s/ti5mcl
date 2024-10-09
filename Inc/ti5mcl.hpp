@@ -92,18 +92,18 @@ public:                  // 常用1
     bool home();         // 回原点
     bool halt();         // 急停
     bool moveAbsolute(float position,
-                      float velocity); // 绝对运动
+                      float velocity = M_PI/6 ); // 绝对运动
     bool moveRelative(float distance,
-                      float velocity);                 // 相对运动
-    bool moveVelocity(float velocity);                 // 速度运动
-    bool moveVelocity(float velocity, float position); // 速度运动
-    typedef enum
-    {
-        DIRECTIONPOSITIVE = 0, // 正向
-        DIRECTIONNEGATIVE = 1, // 负向
-    } Direction;               // 方向
+                      float velocity = M_PI/6 );                 // 相对运动
+    bool moveVelocity(float velocity = M_PI/6);                 // 速度运动
+    bool moveVelocity(float position, float velocity = M_PI/6); // 速度运动
+//    typedef enum
+//    {
+//        DIRECTIONPOSITIVE = 0, // 正向
+//        DIRECTIONNEGATIVE = 1, // 负向
+//    } Direction;               // 方向
 
-    bool moveJog(float velocity); // 点动
+    bool moveJog(float velocity = M_PI/6); // 点动
 public:                           // 常用2
     bool quickSetMaxSpeed(float
                           maxSpeed); // 设置最大速度

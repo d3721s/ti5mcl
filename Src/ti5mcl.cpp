@@ -55,7 +55,7 @@ bool ti5Motor::moveRelative(float distance,
                           velocity * static_cast<uint8_t>(_reductionRatio) * 50 / M_PI);
 }
 
-bool ti5Motor::moveVelocity(float velocity, float position)
+bool ti5Motor::moveVelocity(float position , float velocity)
 {
     tlog_info << "Moving with velocity " << to_string(velocity) << endl;
     if (!_autoStatus)
