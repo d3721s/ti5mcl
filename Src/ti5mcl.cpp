@@ -63,12 +63,11 @@ bool ti5Motor::moveVelocity(float velocity)
     tlog_info << "Moving with velocity " << to_string(velocity) << endl;
     if (!writeParameter(setVelocityModeCode, velocity * static_cast<uint8_t>(_reductionRatio) * 50 / M_PI))
         return false;
+    return true;
 }
 bool ti5Motor::moveVelocity(float position, float velocity)
 {
     tlog_info << "Moving with velocity " << to_string(velocity) << endl;
-    if (!_autoCSPStatus)
-        autoCurrentSpeedPosition(1, 400);
     if (!writeParameter(setVelocityModeCode, velocity * static_cast<uint8_t>(_reductionRatio) * 50 / M_PI))
         return false;
 #warning "timing!"
@@ -77,6 +76,7 @@ bool ti5Motor::moveVelocity(float position, float velocity)
         if (fabs(_position - position <= 0.01))
             return true;
     }
+    return true;
 }
 
 bool ti5Motor::moveJog(float velocity)
@@ -193,11 +193,11 @@ bool ti5Motor::autoMonitor(bool enable)
     return true;
 }
 
-bool ti5Motor::autoCurrentSpeedPosition(
-    bool enable, uint16_t period)
-{
-    return true;
-}
+//bool ti5Motor::autoCurrentSpeedPosition(
+//    bool enable, uint16_t period)
+//{
+//    return true;
+//}
 
 float ti5Motor::autoCurrent() const
 {
