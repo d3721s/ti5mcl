@@ -43,29 +43,38 @@ bool ti5Motor::moveRelative(float distance,
                             float velocity)
 {
     tlog_info << "Moving " << to_string(distance) << " with velocity " << to_string(velocity) << endl;
-    if (!_autoStatus)
+    if (!_autoCSPStatus)
     {
-        if (!readParameter(getPositionCode, &_autoPositionRaw))
+        if (!readParameter(getPositionCode, &_positionRaw))
             return false;
     }
+    else
+    {
+        _positionRaw = _autoPositionRaw;
+    }
     return writeParameter(setPositionAndVelocityCode,
-                          _autoPositionRaw + distance *
+                          _positionRaw + distance *
                           static_cast<uint8_t>(_reductionRatio) * 32768 /
                           M_PI,
                           velocity * static_cast<uint8_t>(_reductionRatio) * 50 / M_PI);
 }
-
-bool ti5Motor::moveVelocity(float position , float velocity)
+bool ti5Motor::moveVelocity(float velocity)
 {
     tlog_info << "Moving with velocity " << to_string(velocity) << endl;
-    if (!_autoStatus)
+    if (!writeParameter(setVelocityModeCode, velocity * static_cast<uint8_t>(_reductionRatio) * 50 / M_PI))
+        return false;
+}
+bool ti5Motor::moveVelocity(float position, float velocity)
+{
+    tlog_info << "Moving with velocity " << to_string(velocity) << endl;
+    if (!_autoCSPStatus)
         autoCurrentSpeedPosition(1, 400);
     if (!writeParameter(setVelocityModeCode, velocity * static_cast<uint8_t>(_reductionRatio) * 50 / M_PI))
         return false;
 #warning "timing!"
     while (1)
     {
-        if (fabs(_autoPosition - position <= 0.01))
+        if (fabs(_position - position <= 0.01))
             return true;
     }
 }
@@ -147,15 +156,39 @@ bool ti5Motor::quickGetMinPosition(
     *minPosition = _minPositionRaw * M_PI / static_cast<uint8_t>(_reductionRatio) / 32768;
     return true;
 }
-
-bool ti5Motor::quickGetEnableStatus(bool *status)
+bool ti5Motor::quickGetMotorTemperature(int32_t *temperature)
 {
-    tlog_info << "Getting enable status!" << endl;
+    int32_t temperatureRaw;
+    if (!readParameter(getMotorTemperatureCode, &temperatureRaw))
+        return false;
+    *temperature = temperatureRaw;
     return true;
 }
-
+bool ti5Motor::quickGetDriverTemperature(int32_t *temperature)
+{
+    int32_t temperatureRaw;
+    if (!readParameter(getDriverTemperatureCode, &temperatureRaw))
+        return false;
+    *temperature = temperatureRaw;
+    return true;
+}
 bool ti5Motor::autoMonitor(bool enable)
 {
+
+    if (enable)
+    {
+        if (!_autoMonitorStatus)
+        {
+//            autoMonitorThread.detach();
+            _autoMonitorStatus = true;
+        }
+    }
+    else
+    {
+        if (_autoMonitorStatus)
+        {
+        }
+    }
 
     return true;
 }
@@ -178,7 +211,7 @@ float ti5Motor::autoSpeed() const
 
 float ti5Motor::autoPosition() const
 {
-    return _autoPosition;
+    return _position;
 }
 
 bool ti5Motor::writeParameter(

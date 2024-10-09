@@ -32,10 +32,10 @@
 
 using sockcanpp::CanDriver;
 using sockcanpp::CanId;
+using sockcanpp::CanMessage;
 using sockcanpp::exceptions::CanException;
 using sockcanpp::exceptions::CanInitException;
 using sockcanpp::exceptions::InvalidSocketException;
-using sockcanpp::CanMessage;
 
 using std::cerr;
 using std::cout;
@@ -44,7 +44,7 @@ using std::string;
 
 void printHelp(string);
 
-int main(int32_t argCount, char** argValues)
+int main(int32_t argCount, char **argValues)
 {
     int32_t desiredCanSocket = 0;
     string canInterface;
@@ -52,8 +52,7 @@ int main(int32_t argCount, char** argValues)
     {
         for (int32_t i = 1; i < argCount; i++)
         {
-            if (argValues[i] == "--help"
-                    || argValues[i] == "-h")
+            if (argValues[i] == "--help" || argValues[i] == "-h")
             {
                 printHelp(argValues[0]);
                 return 0;
@@ -80,12 +79,12 @@ int main(int32_t argCount, char** argValues)
     {
         canInterface = "can0";
     }
-    CanDriver* canDriver;
+    CanDriver *canDriver;
     try
     {
         canDriver = new CanDriver(canInterface, CAN_RAW);
     }
-    catch (CanInitException& ex)
+    catch (CanInitException &ex)
     {
         cerr << "An error occurred while initialising CanDriver: "
              << ex.what() << endl;
@@ -100,15 +99,13 @@ int main(int32_t argCount, char** argValues)
             canDriver->sendMessage(CanMessage(0x555,
                                               "abcdefg8"));
         }
-        catch (CanException& ex)
+        catch (CanException &ex)
         {
-            cerr << "Failed to send test message! " <<
-                 ex.what() << endl;
+            cerr << "Failed to send test message! " << ex.what() << endl;
         }
-        catch (InvalidSocketException& ex)
+        catch (InvalidSocketException &ex)
         {
-            cerr << "Failed to send test message! " <<
-                 ex.what() << endl;
+            cerr << "Failed to send test message! " << ex.what() << endl;
         }
         printf("Reading messages\n");
         if (!canDriver->waitForMessages())
@@ -122,8 +119,7 @@ int main(int32_t argCount, char** argValues)
         {
             auto msg = canMessages.front();
             canMessages.pop();
-            cout << "CAN ID: " << (int32_t)msg.getCanId() <<
-                 endl
+            cout << "CAN ID: " << (int32_t)msg.getCanId() << endl
                  << "CAN data: ";
             for (auto byte : msg.getFrameData())
             {
@@ -136,7 +132,8 @@ int main(int32_t argCount, char** argValues)
 
 void printHelp(string appname)
 {
-    cout << appname << endl << endl
+    cout << appname << endl
+         << endl
          << "-h\t\tPrints this menu" << endl
          << "--help\t\tPrints this menu" << endl
          << "-protocol <protocol_num>" << endl

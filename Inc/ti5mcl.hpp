@@ -25,7 +25,7 @@
 #define LOGLEVEL TLOG_WARN
 #endif
 
-//constexpr double M_PI = M_PI;
+// constexpr double M_PI = M_PI;
 
 namespace ti5mcl
 {
@@ -80,6 +80,25 @@ public:
         _reductionRatio = reductionRatio;
         _canFrameSend.can_id = canId;
         _name = "ti5Motor" + to_string(canId);
+        thread autoMonitorThread([this]() mutable
+        {
+            struct timeval timeoutMonitor;
+            timeoutMonitor.tv_sec = 4;
+            timeoutMonitor.tv_usec = 0;
+            tlog_info << "Monitor thread started!" << endl;
+            while(true)
+            {
+                select(0, NULL, NULL, NULL, &timeoutMonitor);
+                readParameter(getErrorCode, &_autoErrorNum);
+                tlog_debug << "Error code: " << to_string(_autoErrorNum) << endl;
+                if(_autoErrorNum !=0)
+                {
+                    tlog_error << "Error code: " << to_string(_autoErrorNum) << endl;
+                    _status = motorStatus_fail;
+                }
+            }
+        });
+        // thread autoCSPThread([this]() mutable{});
     }
     ~ti5Motor()
     {
@@ -91,20 +110,20 @@ public:                  // 常用1
     bool reset();        // 清楚错误,建议使用this->autoMonitor()管理错误！
     bool home();         // 回原点
     bool halt();         // 急停
-    bool moveAbsolute(float position,
-                      float velocity = M_PI/6 ); // 绝对运动
-    bool moveRelative(float distance,
-                      float velocity = M_PI/6 );                 // 相对运动
-    bool moveVelocity(float velocity = M_PI/6);                 // 速度运动
-    bool moveVelocity(float position, float velocity = M_PI/6); // 速度运动
-//    typedef enum
-//    {
-//        DIRECTIONPOSITIVE = 0, // 正向
-//        DIRECTIONNEGATIVE = 1, // 负向
-//    } Direction;               // 方向
+    bool moveAbsolute(float position = 0,
+                      float velocity = M_PI / 6); // 绝对运动
+    bool moveRelative(float distance = 0,
+                      float velocity = M_PI / 6);                 // 相对运动
+    bool moveVelocity(float velocity = M_PI / 6);                 // 速度运动
+    bool moveVelocity(float position, float velocity = M_PI / 6); // 速度运动
+    //    typedef enum
+    //    {
+    //        DIRECTIONPOSITIVE = 0, // 正向
+    //        DIRECTIONNEGATIVE = 1, // 负向
+    //    } Direction;               // 方向
 
-    bool moveJog(float velocity = M_PI/6); // 点动
-public:                           // 常用2
+    bool moveJog(float velocity = M_PI / 6); // 点动
+public:                                      // 常用2
     bool quickSetMaxSpeed(float
                           maxSpeed); // 设置最大速度
     bool quickSetMaxAcceleration(float
@@ -113,8 +132,8 @@ public:                           // 常用2
                              maxPosition); // 设置最大位置
     bool quickSetMinPosition(float
                              minPosition); // 设置最小位置
-    bool quickSetEnableStatus(bool
-                              status); // 设置指令使能状态
+    bool quickGetCSP(uint32_t _current );
+
     bool quickGetMaxSpeed(float *
                           maxSpeed); // 获取最大速度
     bool quickGetMaxAcceleration(float *
@@ -125,30 +144,36 @@ public:                           // 常用2
                              minPosition); // 获取最小位置
     bool quickGetEnableStatus(bool *
                               status); // 获取使能状态
-    bool quickGetMotorTemperature(int16_t *
+    bool quickGetMotorTemperature(int32_t *
                                   temperature); // 获取电机温度
-    bool quickGetDriverTemperature(int16_t *
+    bool quickGetDriverTemperature(int32_t *
                                    temperature); // 获取驱动器温度
-public:                                              // 常用3
-    bool autoMonitor(bool enable);                   // 自动监控
-    bool autoCurrentSpeedPosition(bool enable,
-                                  uint16_t period); // 自动获取当前电流、速度、位置 单位5ms
-    float autoCurrent() const;                      // 当前电流
-    float autoSpeed() const;                        // 当前速度
-    float autoPosition() const;                     // 当前位置
-
-public: // 扩展1
-    bool customSetMaxCurrent(int32_t
-                             maxCurrent); // 设置最大电流
-    bool customGetMaxCurrent(int32_t *
-                             maxCurrent); // 获取最大电流
     bool customGetErrorStatus(uint16_t *
                               errorStatus); // 获取错误状态
     bool quickGetPositionOffset(int32_t *
                                 offset); // 获取位置偏移 /*注意单位*/
     bool quickSetPositionOffset(int32_t
                                 offset); // 设置位置偏移 /*注意单位*/
+    bool quickRestoreFromFlash();            // 从Flash恢复参数
+    bool quickSaveToFlash();                 // 保存参数到Flash
+    bool quickRestoreFactory();              // 恢复出厂设置
+    // bool quickStoreToFactory(); //储存参数到出厂
 
+public:                            // 常用3
+    bool autoMonitor(bool enable); // 自动监控
+    // bool autoCurrentSpeedPosition(bool enable,
+    //                               uint16_t period); // 自动获取当前电流、速度、位置 单位5ms
+    // 破坏标准协议 建议使用quickgetCSP()方法
+    float autoCurrent() const;                      // 当前电流
+    float autoSpeed() const;                        // 当前速度
+    float autoPosition() const;                     // 当前位置
+
+    //public: // 扩展1
+private: // 未测试，暂时禁用扩展
+    bool customSetMaxCurrent(int32_t
+                             maxCurrent); // 设置最大电流
+    bool customGetMaxCurrent(int32_t *
+                             maxCurrent); // 获取最大电流
     bool customGetSpeedProportional(int32_t *
                                     proportional); // 获取速度环比例
     bool customGetSpeedIntegral(int32_t *
@@ -161,11 +186,6 @@ public: // 扩展1
                                      derivative); // 获取位置微分
     bool customGetVoltage(int32_t *
                           voltage); // 获取母线电压
-    bool customRestoreFromFlash();      // 从Flash恢复参数
-    bool customSaveToFlash();           // 保存参数到Flash
-    bool customRestoreFactory();        // 恢复出厂设置
-    // bool customStoreToFactory();//储存参数到出厂
-
     bool customGetMotorModel(int32_t *
                              model); // 获取电机型号
     bool customGetMotorVersion(int32_t *
@@ -173,8 +193,8 @@ public: // 扩展1
     bool customGetDriverVersion(int32_t *
                                 version); // 获取驱动器软件版本号
     bool customGetCurrentSpeedPosition();
-    bool customGetEncoderVoltage(int32_t *voltage);
-    bool customGetEncoderStatus(uint16_t *status);
+    bool customGetEncoderVoltage(int32_t *voltage); // 获取编码器电压
+    bool customGetEncoderStatus(uint16_t *status);  // 获取编码器状态
 
 private:
     typedef enum // set
@@ -311,7 +331,6 @@ private:
                         int32_t value1,
                         uint16_t value2);
     // bool writeParameter(parameterCodeTableSend8 parameterCode,uint64_t value);
-#warning "TODO:8 bytes order"
     bool readParameter(
         parameterCodeTableSend1Receive1_4 parameterCode,
         int32_t *value);
@@ -328,15 +347,28 @@ private:
     static shared_ptr<CanDriver> _canDriver;
     uint8_t _canId;
     reductionRatio _reductionRatio;
+    typedef enum
+    {
+        motorStatus_okay,
+        motorStatus_disable,
+        motorStatus_fail,
+    } motorStatus;
+    motorStatus _status;
     can_frame _canFrameSend;
     can_frame _canFrameReceive;
-    bool _status = true;
-    bool _autoStatus = false;
-    volatile int32_t _autoCurrent;
-    volatile float _autoSpeed;
-    volatile float _autoPosition;
+    bool _autoMonitorStatus = false;
+
+    int32_t _autoErrorNum = 0;
+    const bool _autoCSPStatus = false; //暂时const false
+    #warning "暂时const false"
+    uint32_t _autoCSPPeriod = 0;
+    int32_t _autoCurrent;
+    float _autoSpeed;
     int32_t _autoSpeedRaw;
+    float _autoPosition;
+    float _position;
     int32_t _autoPositionRaw;
+    int32_t _positionRaw;
     string _name;
     mutex canMutex;
 };
