@@ -25,8 +25,6 @@
 #define LOGLEVEL TLOG_WARN
 #endif
 
-// constexpr double M_PI = M_PI;
-
 namespace ti5mcl
 {
 
@@ -37,6 +35,7 @@ class ti5Motor
 public:
     typedef enum
     {
+        reductionRatio1 = 1,
         reductionRatio51 = 51,
         reductionRatio81 = 81,
         reductionRatio101 = 101,
