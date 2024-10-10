@@ -121,7 +121,7 @@ public:                  // 常用1
     //        DIRECTIONNEGATIVE = 1, // 负向
     //    } Direction;               // 方向
 
-    bool moveJog(float velocity = M_PI / 6); // 点动
+    bool moveJog(float velocity = M_PI / 6); // 点动 
 public:                                      // 常用2
     bool quickSetMaxVelocity(float
                           maxVelocity); // 设置最大速度
