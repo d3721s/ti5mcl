@@ -211,7 +211,7 @@ float ti5Motor::autoSpeed() const
 
 float ti5Motor::autoPosition() const
 {
-    return _position;
+    return _autoPosition;
 }
 
 bool ti5Motor::writeParameter(
