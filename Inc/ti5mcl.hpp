@@ -124,18 +124,18 @@ public:                  // 常用1
 
     bool moveJog(float velocity = M_PI / 6); // 点动
 public:                                      // 常用2
-    bool quickSetMaxSpeed(float
-                          maxSpeed); // 设置最大速度
+    bool quickSetMaxVelocity(float
+                          maxVelocity); // 设置最大速度
     bool quickSetMaxAcceleration(float
                                  maxAcceleration); // 设置最大加速度
     bool quickSetMaxPosition(float
                              maxPosition); // 设置最大位置
     bool quickSetMinPosition(float
                              minPosition); // 设置最小位置
-    bool quickGetCSP(uint32_t _current );
+    bool quickGetCSP(uint32_t _current);
 
-    bool quickGetMaxSpeed(float *
-                          maxSpeed); // 获取最大速度
+    bool quickGetMaxVelocity(float *
+                          maxVelocity); // 获取最大速度
     bool quickGetMaxAcceleration(float *
                                  maxAcceleration); // 获取最大加速度
     bool quickGetMaxPosition(float *
@@ -161,11 +161,11 @@ public:                                      // 常用2
 
 public:                            // 常用3
     bool autoMonitor(bool enable); // 自动监控
-    // bool autoCurrentSpeedPosition(bool enable,
+    // bool autoCurrentVelocityPosition(bool enable,
     //                               uint16_t period); // 自动获取当前电流、速度、位置 单位5ms
     // 破坏标准协议 建议使用quickgetCSP()方法
     float autoCurrent() const;                      // 当前电流
-    float autoSpeed() const;                        // 当前速度
+    float autoVelocity() const;                        // 当前速度
     float autoPosition() const;                     // 当前位置
 
     //public: // 扩展1
@@ -174,11 +174,11 @@ private: // 未测试，暂时禁用扩展
                              maxCurrent); // 设置最大电流
     bool customGetMaxCurrent(int32_t *
                              maxCurrent); // 获取最大电流
-    bool customGetSpeedProportional(int32_t *
+    bool customGetVelocityProportional(int32_t *
                                     proportional); // 获取速度环比例
-    bool customGetSpeedIntegral(int32_t *
+    bool customGetVelocityIntegral(int32_t *
                                 integral); // 获取速度积分
-    // bool customGetSpeedDerivative(int32_t *derivative); //获取速度微分
+    // bool customGetVelocityDerivative(int32_t *derivative); //获取速度微分
     bool customGetPositionProportional(
         int32_t *proportional); // 获取位置环比例
     // bool customGetPositionIntegral(int32_t *integral); //获取位置积分
@@ -192,7 +192,7 @@ private: // 未测试，暂时禁用扩展
                                version); // 获取电机版本号
     bool customGetDriverVersion(int32_t *
                                 version); // 获取驱动器软件版本号
-    bool customGetCurrentSpeedPosition();
+    bool customGetCurrentVelocityPosition();
     bool customGetEncoderVoltage(int32_t *voltage); // 获取编码器电压
     bool customGetEncoderStatus(uint16_t *status);  // 获取编码器状态
 
@@ -217,8 +217,8 @@ private:
         getPositionCode = 8,                 // 位置
         getTargetPositionCode = 9,           // 目标位置
         getErrorCode = 10,                   // 错误
-        getSpeedLoopKpCode = 16,             // 速度环P增益
-        getSpeedLoopKiCode = 17,             // 速度环I增益
+        getVelocityLoopKpCode = 16,             // 速度环P增益
+        getVelocityLoopKiCode = 17,             // 速度环I增益
         getPositionLoopKpCode = 18,          // 位置环P增益
         getPositionLoopKdCode = 19,          // 位置环D增益
         getBusVoltageCode = 20,              // 总线电压
@@ -230,7 +230,7 @@ private:
         getMaxNegativePositionCode = 27,     // 最大负向位置
         getMotorTemperatureCode = 49,        // 电机温度
         getDriverTemperatureCode = 50,       // 驱动器温度
-        getSpeedLoopKdCode = 51,             // 速度环D增益
+        getVelocityLoopKdCode = 51,             // 速度环D增益
         getPositionLoopKiCode = 52,          // 位置环I增益
         getMaxPositiveCurrentCode = 53,      // 最大正向电流
         getMaxNegativeCurrentCode = 54,      // 最大负向电流
@@ -252,7 +252,7 @@ private:
 
     typedef enum // get
     {
-        getCurrentSpeedPositionCode = 65, // 循环同步位置
+        getCurrentVelocityPositionCode = 65, // 循环同步位置
     } parameterCodeTableSend1Receive2_2_4;
 
     typedef enum // set
@@ -269,8 +269,8 @@ private:
         setMaxNegativeVelocityCode = 37,     // 最大负向速度
         setMaxPositivePositionCode = 38,     // 最大正向位置
         setMaxNegativePositionCode = 39,     // 最大负向位置
-        setSpeedLoopKpCode = 41,             // 速度环比例增益
-        setSpeedLoopKiCode = 42,             // 速度环积分增益
+        setVelocityLoopKpCode = 41,             // 速度环比例增益
+        setVelocityLoopKiCode = 42,             // 速度环积分增益
         setPositionLoopKpCode = 43,          // 位置环比例增益
         setPositionLoopKiCode = 44,          // 位置环积分增益
         setPositionLoopKdCode = 45,          // 位置环微分增益
@@ -361,12 +361,13 @@ private:
     int32_t _autoErrorNum = 0;
     const bool _autoCSPStatus = false; //暂时const false
     #warning "暂时const false"
-    uint32_t _autoCSPPeriod = 0;
+    const uint32_t _autoCSPPeriod = 0;
     int32_t _autoCurrent;
-    float _autoSpeed;
-    int32_t _autoSpeedRaw;
+    float _autoVelocity;
+    int32_t _autoVelocityRaw;
     float _autoPosition;
     float _position;
+    float _velocity;
     int32_t _autoPositionRaw;
     int32_t _positionRaw;
     string _name;
