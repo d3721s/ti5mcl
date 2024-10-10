@@ -42,7 +42,7 @@ public:
         reductionRatio121 = 121,
     } reductionRatio;
     ti5Motor(uint8_t canId,
-             reductionRatio reductionRatio)
+             reductionRatio reductionRatio):_canId(canId), _reductionRatio(reductionRatio)
     {
         static once_flag canDriverInitializedFlag;
         static once_flag tlogInitializedFlag;
@@ -75,10 +75,6 @@ public:
             }
             tlog_setlevel(LOGLEVEL);
         });
-        _canId = canId;
-        _reductionRatio = reductionRatio;
-        _canFrameSend.can_id = canId;
-        _name = "ti5Motor" + to_string(canId);
         thread autoMonitorThread([this]() mutable
         {
             struct timeval timeoutMonitor;
@@ -367,7 +363,6 @@ private:
     float _autoPosition;
     int32_t _autoPositionRaw;
     int32_t _positionRaw;
-    string _name;
     mutex canMutex;
 };
 
