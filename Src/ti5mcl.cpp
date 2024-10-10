@@ -70,12 +70,7 @@ bool ti5Motor::moveVelocity(float position, float velocity)
     tlog_info << "Moving with velocity " << to_string(velocity) << endl;
     if (!writeParameter(setVelocityModeCode, velocity * static_cast<uint8_t>(_reductionRatio) * 50 / M_PI))
         return false;
-#warning "timing!"
-    while (1)
-    {
-        if (fabs(_position - position <= 0.01))
-            return true;
-    }
+#warning "TODO:position conctrl!"
     return true;
 }
 

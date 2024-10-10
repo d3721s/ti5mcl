@@ -366,8 +366,6 @@ private:
     float _autoVelocity;
     int32_t _autoVelocityRaw;
     float _autoPosition;
-    float _position;
-    float _velocity;
     int32_t _autoPositionRaw;
     int32_t _positionRaw;
     string _name;
